@@ -1,0 +1,393 @@
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green-dark:   #2d6a4f;
+  --green-mid:    #40916c;
+  --green-light:  #74c69d;
+  --green-pale:   #d8f3dc;
+  --accent:       #f4a261;
+  --text-dark:    #1b1b1b;
+  --text-mid:     #444;
+  --card-bg:      #f9fafb;
+  --card-border:  #d0e8d8;
+  --shadow:       0 2px 8px rgba(0,0,0,0.12);
+  --radius:       12px;
+  --font:         'Segoe UI', Arial, sans-serif;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--green-pale);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+header {
+  background: var(--green-dark);
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem 1rem 1rem;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+/* =============================================
+   MAP
+   ============================================= */
+#map-section {
+  position: relative;
+  margin: 1rem auto;
+  max-width: 480px;
+  padding: 0 1rem;
+}
+
+#park-map {
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: block;
+}
+
+.map-placeholder {
+  width: 100%;
+  height: 160px;
+  background: var(--green-light);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--green-dark);
+  box-shadow: var(--shadow);
+  display: none; /* shown by JS if image missing */
+}
+
+/* =============================================
+   PROGRESS
+   ============================================= */
+#progress-section {
+  max-width: 480px;
+  margin: 0 auto 1rem;
+  padding: 0 1rem;
+}
+
+#progress-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  margin-bottom: 0.4rem;
+}
+
+#progress-bar-wrap {
+  background: #c3e6cb;
+  border-radius: 99px;
+  height: 12px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+#progress-bar {
+  height: 100%;
+  background: var(--green-mid);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+.browser-hint {
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  background: #fff3cd;
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  line-height: 1.4;
+}
+
+/* =============================================
+   CARDS GRID
+   ============================================= */
+#cards-section {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+#cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+/* Make the 7th card centred when alone in the last row */
+#cards-grid .card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: 50%;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ---- Base card ---- */
+.card {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:active {
+  transform: scale(0.97);
+}
+
+/* ---- Undiscovered (placeholder) ---- */
+.card.undiscovered {
+  background: #e9f5ee;
+  border-style: dashed;
+  border-color: var(--green-light);
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+}
+
+.card.undiscovered .card-placeholder-icon {
+  font-size: 2.4rem;
+  margin-bottom: 0.3rem;
+}
+
+.card.undiscovered .card-placeholder-num {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* ---- Discovered ---- */
+.card.discovered .card-img-wrap {
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
+  background: var(--green-light);
+}
+
+.card.discovered .card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card.discovered .card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.6rem;
+}
+
+.card.discovered .card-body {
+  padding: 0.5rem 0.6rem 0.6rem;
+  flex: 1;
+}
+
+.card.discovered .card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 0.25rem;
+}
+
+.card.discovered .card-desc {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Newly discovered badge ---- */
+.card .badge-new {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* =============================================
+   TOAST
+   ============================================= */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 0.75rem 1.2rem;
+  border-radius: 99px;
+  font-size: 0.9rem;
+  max-width: 90vw;
+  text-align: center;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  transition: opacity 0.4s;
+}
+
+.toast.success { background: var(--green-mid); }
+.toast.error   { background: #c0392b; }
+.toast.info    { background: #2980b9; }
+.toast.hidden  { opacity: 0; pointer-events: none; }
+
+/* =============================================
+   MODAL (card detail & final screen)
+   ============================================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: var(--radius);
+  max-width: 400px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+#modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.7rem;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+  z-index: 1;
+}
+
+#modal-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  background: var(--green-light);
+}
+
+#modal-title {
+  font-size: 1.2rem;
+  color: var(--green-dark);
+  padding: 0.8rem 1rem 0.3rem;
+}
+
+#modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  padding: 0 1rem 1.2rem;
+  line-height: 1.6;
+}
+
+/* ---- Final screen ---- */
+.final-content {
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.final-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.final-content h2 {
+  font-size: 1.5rem;
+  color: var(--green-dark);
+  margin-bottom: 0.5rem;
+}
+
+.final-content p {
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  margin-bottom: 0.4rem;
+}
+
+.final-code {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--green-dark);
+  background: var(--green-pale);
+  border: 3px solid var(--green-mid);
+  border-radius: var(--radius);
+  padding: 0.6rem 1.5rem;
+  margin: 0.8rem auto;
+  display: inline-block;
+}
+
+.final-hint {
+  font-size: 0.82rem;
+  margin-top: 0.6rem;
+  color: var(--text-mid);
+}
+
+#final-close {
+  margin-top: 1.2rem;
+  background: var(--green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  padding: 0.65rem 1.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#final-close:active {
+  opacity: 0.85;
+}

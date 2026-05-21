@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Co piszczy w trawie w naszym parku</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Nagłówek -->
+  <header>
+    <h1>Co piszczy w trawie<br>w naszym parku?</h1>
+  </header>
+
+  <!-- Mapa parku -->
+  <section id="map-section">
+    <img id="park-map" src="images/map.jpg" alt="Mapa parku" onerror="this.style.display='none'" />
+    <div id="map-placeholder" class="map-placeholder">🗺️ Mapa parku</div>
+  </section>
+
+  <!-- Licznik postępu -->
+  <section id="progress-section">
+    <p id="progress-text">Odkryto: <span id="count">0</span> / 7 kart</p>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <p class="browser-hint">⚠️ Używaj tej samej przeglądarki na tym samym telefonie, aby zachować postęp.</p>
+  </section>
+
+  <!-- Siatka kart -->
+  <section id="cards-section">
+    <div id="cards-grid"></div>
+  </section>
+
+  <!-- Toast / komunikat -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Modal odkrytej karty -->
+  <div id="card-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button id="modal-close" aria-label="Zamknij">&times;</button>
+      <img id="modal-img" src="" alt="" />
+      <h2 id="modal-title"></h2>
+      <p id="modal-desc"></p>
+    </div>
+  </div>
+
+  <!-- Ekran końcowy -->
+  <div id="final-screen" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content final-content">
+      <div class="final-icon">🏆</div>
+      <h2>Gratulacje!</h2>
+      <p>Odkryłeś/aś wszystkie 7 kart!</p>
+      <p>Twój kod finałowy:</p>
+      <div id="final-code" class="final-code"></div>
+      <p class="final-hint">Pokaż ten kod organizatorowi festynu, aby odebrać nagrodę!</p>
+      <button id="final-close">Wróć do mapy</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
