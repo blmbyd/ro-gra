@@ -37,7 +37,7 @@ const CARDS = [
   {
     id: 4,
     token: 'G9LT6',
-    title: 'Wioska Smerów',
+    title: 'Wioska Smerfów',
     desc: 'Żaba trawna może skakać na odległość do metra – to ponad 20-krotność jej własnego ciała! Zimę spędza w letargu pod ziemią lub na dnie stawów.',
     image: 'img/card-4.jpg',
     emoji: '🐸'
@@ -53,7 +53,7 @@ const CARDS = [
   {
     id: 6,
     token: 'B7NYU',
-    title: 'Wiewórka Baśka',
+    title: 'Wiewiórka Baśka',
     desc: 'Trzmiele potrafią latać nawet przy temperaturze 5°C, gdy pszczoły miodne jeszcze siedzą w ulu. Ogrzewają ciało wibrując mięśniami skrzydłowymi jak silnikiem.',
     image: 'img/card-6.jpg',
     emoji: '🐝'
@@ -61,7 +61,7 @@ const CARDS = [
   {
     id: 7,
     token: 'M3RGK',
-    title: 'Hotel owadów',
+    title: 'Hotel dla owadów',
     desc: 'Jedno mrowisko rudnicy może liczyć nawet milion mieszkańców! Mrówki komunikują się za pomocą feromonów – chemicznych sygnałów zapachowych – i razem mogą przenosić ciężary 50-krotnie przekraczające wagę jednej mrówki.',
     image: 'img/card-7.jpg',
     emoji: '🐜'
