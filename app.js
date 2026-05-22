@@ -168,6 +168,11 @@ function closeFinalScreen() {
   document.getElementById('final-screen').classList.add('hidden');
 }
 
+function showFinalBanner(code) {
+  document.getElementById('final-banner-code').textContent = code;
+  document.getElementById('final-banner').classList.remove('hidden');
+}
+
 /* =============================================
    RENDEROWANIE KART
    ============================================= */
@@ -248,22 +253,61 @@ function handleQrParam() {
 }
 
 /* =============================================
+   OBSŁUGA TAJNEGO PARAMETRU ?admin=AKCJA
+   Zwraca: 'reset' | 'reveal-all' | 'none'
+   Akcje:
+     reset      – czyści postęp i kod finałowy
+     reveal-all – odkrywa wszystkie karty, generuje nowy kod
+   ============================================= */
+function handleAdminParam() {
+  const params = new URLSearchParams(window.location.search);
+  const action = params.get('admin');
+
+  if (!action) return 'none';
+
+  // Usuń parametr z URL bez przeładowania strony
+  const cleanUrl = window.location.pathname + window.location.hash;
+  history.replaceState(null, '', cleanUrl);
+
+  if (action === 'reset') {
+    localStorage.removeItem(LS_DISCOVERED);
+    localStorage.removeItem(LS_FINAL_CODE);
+    return 'reset';
+  }
+
+  if (action === 'reveal-all') {
+    saveDiscovered(CARDS.map(c => c.id));
+    saveFinalCode(generateFinalCode());
+    return 'reveal-all';
+  }
+
+  return 'none';
+}
+
+/* =============================================
    INICJALIZACJA
    ============================================= */
 function init() {
-  // 1. Obsłuż parametr QR
-  const { status, card } = handleQrParam();
+  // 1. Obsłuż tajny parametr administracyjny (priorytet nad parametrem QR)
+  const adminAction = handleAdminParam();
 
-  // 2. Odczytaj stan
+  // 2. Obsłuż parametr QR (pomijany gdy wykonano akcję administracyjną)
+  const { status, card } = adminAction === 'none' ? handleQrParam() : { status: 'none', card: null };
+
+  // 3. Odczytaj stan
   const discovered = getDiscovered();
   const count = discovered.length;
 
-  // 3. Renderuj UI
+  // 4. Renderuj UI
   renderCards(discovered, status === 'ok' ? card.id : null);
   updateProgress(count);
 
-  // 4. Pokaż komunikat zależny od statusu QR
-  if (status === 'ok') {
+  // 5. Pokaż komunikat zależny od wykonanej akcji
+  if (adminAction === 'reset') {
+    showToast('Postęp zresetowany.', 'info', 3500);
+  } else if (adminAction === 'reveal-all') {
+    showToast('Wszystkie karty odsłonięte.', 'success', 3500);
+  } else if (status === 'ok') {
     showToast(`✅ Odkryto nową kartę: ${card.title}!`, 'success', 4000);
     openCardModal(card);
   } else if (status === 'already') {
@@ -272,15 +316,17 @@ function init() {
     showToast('❌ Nieznany kod QR. Spróbuj zeskanować ponownie.', 'error', 4000);
   }
 
-  // 5. Jeśli wszystkie odkryte – generuj lub pokaż kod finałowy
+  // 6. Jeśli wszystkie odkryte – generuj lub pokaż kod finałowy
   if (count === TOTAL) {
     let code = getFinalCode();
     if (!code) {
       code = generateFinalCode();
       saveFinalCode(code);
     }
+    showFinalBanner(code);
     // Pokaż ekran końcowy z krótkim opóźnieniem (żeby modal karty zdążył się zamknąć)
-    setTimeout(() => showFinalScreen(code), status === 'ok' ? 1800 : 400);
+    const delay = (adminAction === 'reveal-all' || status === 'ok') ? 1800 : 400;
+    setTimeout(() => showFinalScreen(code), delay);
   }
 
   // 6. Pokaż mapę lub placeholder

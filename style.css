@@ -391,3 +391,33 @@ header h1 {
 #final-close:active {
   opacity: 0.85;
 }
+
+/* =============================================
+   FINAL CODE BANNER (top of page)
+   ============================================= */
+#final-banner {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--accent);
+  text-align: center;
+  padding: 1rem 1.2rem 1.2rem;
+  max-width: 480px;
+  margin: 0 auto 1rem;
+}
+
+#final-banner.hidden {
+  display: none;
+}
+
+.final-banner-label {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  margin-bottom: 0.4rem;
+}
+
+.final-banner-hint {
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  margin-top: 0.5rem;
+}

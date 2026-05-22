@@ -93,9 +93,33 @@ Aby podmienić mapę, umieść plik `images/map.jpg` w repozytorium.
 
 ---
 
-## Reset stanu (dla organizatora / testów)
+## Tajne akcje dla organizatora / testów
 
-Stan gry zapisany jest w `localStorage` przeglądarki. Aby go wyczyścić:
+Aplikacja obsługuje dwa ukryte parametry URL przeznaczone dla organizatora lub do testowania. Parametr `admin` ma priorytet nad parametrem `q` – jeśli oba są obecne w URL, akcja administracyjna wygrywa.
+
+### Reset postępu
+
+Czyści zapisane odkrycia i kod finałowy. Gra wraca do stanu 0/7.
+
+```
+https://<adres-aplikacji>/?admin=reset
+```
+
+### Odsłonięcie wszystkich kart
+
+Odkrywa wszystkie 7 kart i zawsze generuje nowy kod finałowy. Przydatne do demonstracji przed festynem.
+
+```
+https://<adres-aplikacji>/?admin=reveal-all
+```
+
+W obu przypadkach parametr `admin` jest automatycznie usuwany z paska adresu po wykonaniu akcji.
+
+---
+
+## Reset stanu przez konsolę (alternatywa)
+
+Stan gry zapisany jest w `localStorage` przeglądarki. Aby go wyczyścić ręcznie:
 
 1. Otwórz *Narzędzia deweloperskie* (F12) → zakładka **Application** → **Local Storage**.
 2. Usuń klucze `rogra_discovered` i `rogra_final_code`.
