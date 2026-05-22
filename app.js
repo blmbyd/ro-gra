@@ -14,64 +14,64 @@ const CARDS = [
     id: 1,
     token: 'AB3K7',
     title: 'Zagraj w Szachy',
-    desc: 'Jeż może mieć nawet 5000 kolców! Każdy kolec to zmodyfikowany włos. Kiedy jeż czuje zagrożenie, zwija się w kulkę i najeża kolce we wszystkich kierunkach.',
-    task: 'Znajdź w parku roślinę lub krzew z kolcami. Czy potrafisz policzyć, ile ich ma na jednej gałązce?',
+    desc: 'Szachy to jedna z najstarszych gier na świecie – ma ponad 1500 lat! Dawno temu zamiast pionków na planszy stały figurki prawdziwych słoni bojowych i rydwanów.',
+    task: 'Policz, ile małych kwadracików (pól) znajduje się na całej szachownicy. Podpowiedź: jest ich więcej niż 50!',
     image: 'img/card-1.jpg',
-    emoji: '🦔'
+    emoji: '♟️'
   },
   {
     id: 2,
     token: 'QR2NP',
     title: 'Ścieżka dydaktyczna',
-    desc: 'Liczba kropek na pancerzyku biedronki wskazuje jej gatunek, a nie wiek! Biedronka siedmiokropka zjada dziennie nawet 150 mszyc – jest prawdziwym sprzymierzeńcem ogrodników.',
-    task: 'Poszukaj biedronki na pobliskich liściach lub kwiatach. Ile ma kropek? Czy to biedronka siedmiokropka?',
+    desc: 'Kiedy kładziesz się spać, w parku zaczyna się wielka impreza! Na tej tablicy ukryły się zwierzęta, które uwielbiają ciemność. Jedno z nich ma tysiące igieł, a w nocy drepcze po parku i poluje na ślimaki.',
+    task: 'W jak małą szczelinę (ile centymetrów) potrafi wcisnąć się najmniejszy nietoperz?',
     image: 'img/card-2.jpg',
-    emoji: '🐞'
+    emoji: '🦔'
   },
   {
     id: 3,
     token: 'XH4WM',
     title: 'Wybieg dla psów',
-    desc: 'Wróble kąpią się w piasku, by pozbyć się pasożytów z piór. Potrafią zapamiętać twarze ludzkie i rozróżniać przyjaznych ludzi od tych, którym nie ufają.',
-    task: 'Stań nieruchomo jak posąg przez 30 sekund i obserwuj, ile wróbli uda Ci się zauważyć w zasięgu wzroku.',
+    desc: 'Psy potrafią rozpoznać Twój nastrój po samym zapachu! Ich nosy są tak niesamowite, że wyczuwają nawet to, czy jesteś wesoły, czy zmęczony.',
+    task: 'Wyobraź sobie, że biegniesz po torze przeszkód tak szybko jak zwinny piesek. Zrób 5 pajacyków na start!',
     image: 'img/card-3.jpg',
-    emoji: '🐦'
+    emoji: '�'
   },
   {
     id: 4,
     token: 'G9LT6',
     title: 'Wioska Smerfów',
-    desc: 'Żaba trawna może skakać na odległość do metra – to ponad 20-krotność jej własnego ciała! Zimę spędza w letargu pod ziemią lub na dnie stawów.',
-    task: 'Zmierz swój wzrost i oblicz, ile razy musisz skakać, by pokonać 20-krotność swojej długości – tak jak żaba!',
+    desc: 'Smerfy mają dokładnie po 3 jabłka wzrostu i mieszkają w domkach z grzybów. Ten niebieski stworek na pniu pilnuje wejścia do ich leśnego świata!',
+    task: 'Zawołaj głośno: „Jak ja nie cierpię smerfów!” głosem Gargamela.',
     image: 'img/card-4.jpg',
-    emoji: '🐸'
+    emoji: '🍄'
   },
   {
     id: 5,
     token: 'C4JVZ',
     title: 'Dąb "Skaut"',
-    desc: 'Wzór na skrzydłach rusałki pawik naśladuje oczy ptaka drapieżnego. Skrzydła motyla są pokryte tysiącami łuseczek, które tworzą te przepiękne wzory.',
-    task: 'Rozejrzyj się – czy widzisz jakiegoś motyla? Spróbuj cicho się zbliżyć i narysować go z pamięci po powrocie do domu.',
+    desc: 'Ten dąb to żywy pomnik! Został posadzony na cześć harcerzy z drużyny „Zielona Siódemka”, która powstała aż 100 lat temu. Harcerze (nazywani też skautami) uwielbiają przyrodę, potrafią rozpalać ogniska bez zapałek i posługują się tajnymi szyframi.',
+    task: 'Odszukaj pod drzewem pamiątkowy kamień. Jaki numer ma ukryta na nim harcerska drużyna?',
     image: 'img/card-5.jpg',
-    emoji: '🦋'
+    emoji: '🌳'
   },
   {
     id: 6,
     token: 'B7NYU',
     title: 'Wiewiórka Baśka',
-    desc: 'Trzmiele potrafią latać nawet przy temperaturze 5°C, gdy pszczoły miodne jeszcze siedzą w ulu. Ogrzewają ciało wibrując mięśniami skrzydłowymi jak silnikiem.',
-    task: 'Znajdź kwitnący kwiatek i odczekaj 2 minuty w ciszy. Czy pojawi się trzmiel lub pszczoła?',
+    desc: 'Wiewiórki to najlepsi leśny ogrodnicy. Często zakopują orzechy w ziemi i zapominają, gdzie je schowały – dzięki temu wyrastają z nich nowe drzewa!',
+    task: 'Rozejrzyj się uważnie dookoła. Czy gdzieś na gałęzi albo na trawie nie błyska ruda kita Basi?',
     image: 'img/card-6.jpg',
-    emoji: '🐝'
+    emoji: '�️'
   },
   {
     id: 7,
     token: 'M3RGK',
     title: 'Hotel dla owadów',
-    desc: 'Jedno mrowisko rudnicy może liczyć nawet milion mieszkańców! Mrówki komunikują się za pomocą feromonów – chemicznych sygnałów zapachowych – i razem mogą przenosić ciężary 50-krotnie przekraczające wagę jednej mrówki.',
-    task: 'Znajdź szlak mrówek i policz, ile mrówek przejdzie przez wybrany punkt w ciągu 10 sekund.',
+    desc: 'Ten niezwykły domek z gliny, drewna i rurek to schronisko dla dzikich pszczół i innych pomocnych robaczków. Nie robią one miodu, ale za to ciężko pracują, zapylając kwiaty i drzewa w parku.',
+    task: 'Podejdź cicho i sprawdź, czy w małych otworach widać już jakichś sypiających lokatorów. Pamiętaj – nie hałasuj, trwa doba hotelowa!',
     image: 'img/card-7.jpg',
-    emoji: '🐜'
+    emoji: '�'
   }
 ];
 
