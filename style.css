@@ -427,6 +427,30 @@ header h1 {
   margin: 0;
 }
 
+.modal-close-bar {
+  padding: 0.75rem 1rem 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+
+#modal-close-bottom {
+  width: 100%;
+  max-width: 320px;
+  background: var(--green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  padding: 0.85rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+}
+
+#modal-close-bottom:active {
+  opacity: 0.85;
+}
+
 /* ---- Final screen ---- */
 .final-content {
   text-align: center;

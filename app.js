@@ -381,6 +381,7 @@ function init() {
    OBSŁUGA ZDARZEŃ
    ============================================= */
 document.getElementById('modal-close').addEventListener('click', closeCardModal);
+document.getElementById('modal-close-bottom').addEventListener('click', closeCardModal);
 document.getElementById('card-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('card-modal')) closeCardModal();
 });
