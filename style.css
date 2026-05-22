@@ -384,14 +384,47 @@ header h1 {
 #modal-title {
   font-size: 1.2rem;
   color: var(--green-dark);
-  padding: 0.8rem 1rem 0.3rem;
+  padding: 0.8rem 1rem 0.5rem;
 }
 
-#modal-desc {
+.modal-section {
+  margin: 0 1rem 1rem;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem 0.7rem;
+}
+
+.modal-section--fact {
+  background: var(--green-pale);
+  border-left: 4px solid var(--green-mid);
+}
+
+.modal-section--task {
+  background: #fff8ef;
+  border-left: 4px solid var(--accent);
+}
+
+.modal-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
+}
+
+.modal-section--fact .modal-section-label {
+  color: var(--green-dark);
+}
+
+.modal-section--task .modal-section-label {
+  color: #c26a1a;
+}
+
+#modal-desc,
+#modal-task {
   font-size: 0.9rem;
   color: var(--text-mid);
-  padding: 0 1rem 1.2rem;
   line-height: 1.6;
+  margin: 0;
 }
 
 /* ---- Final screen ---- */

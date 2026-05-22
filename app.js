@@ -15,6 +15,7 @@ const CARDS = [
     token: 'AB3K7',
     title: 'Zagraj w Szachy',
     desc: 'Jeż może mieć nawet 5000 kolców! Każdy kolec to zmodyfikowany włos. Kiedy jeż czuje zagrożenie, zwija się w kulkę i najeża kolce we wszystkich kierunkach.',
+    task: 'Znajdź w parku roślinę lub krzew z kolcami. Czy potrafisz policzyć, ile ich ma na jednej gałązce?',
     image: 'img/card-1.jpg',
     emoji: '🦔'
   },
@@ -23,6 +24,7 @@ const CARDS = [
     token: 'QR2NP',
     title: 'Ścieżka dydaktyczna',
     desc: 'Liczba kropek na pancerzyku biedronki wskazuje jej gatunek, a nie wiek! Biedronka siedmiokropka zjada dziennie nawet 150 mszyc – jest prawdziwym sprzymierzeńcem ogrodników.',
+    task: 'Poszukaj biedronki na pobliskich liściach lub kwiatach. Ile ma kropek? Czy to biedronka siedmiokropka?',
     image: 'img/card-2.jpg',
     emoji: '🐞'
   },
@@ -31,6 +33,7 @@ const CARDS = [
     token: 'XH4WM',
     title: 'Wybieg dla psów',
     desc: 'Wróble kąpią się w piasku, by pozbyć się pasożytów z piór. Potrafią zapamiętać twarze ludzkie i rozróżniać przyjaznych ludzi od tych, którym nie ufają.',
+    task: 'Stań nieruchomo jak posąg przez 30 sekund i obserwuj, ile wróbli uda Ci się zauważyć w zasięgu wzroku.',
     image: 'img/card-3.jpg',
     emoji: '🐦'
   },
@@ -39,6 +42,7 @@ const CARDS = [
     token: 'G9LT6',
     title: 'Wioska Smerfów',
     desc: 'Żaba trawna może skakać na odległość do metra – to ponad 20-krotność jej własnego ciała! Zimę spędza w letargu pod ziemią lub na dnie stawów.',
+    task: 'Zmierz swój wzrost i oblicz, ile razy musisz skakać, by pokonać 20-krotność swojej długości – tak jak żaba!',
     image: 'img/card-4.jpg',
     emoji: '🐸'
   },
@@ -47,6 +51,7 @@ const CARDS = [
     token: 'C4JVZ',
     title: 'Dąb "Skaut"',
     desc: 'Wzór na skrzydłach rusałki pawik naśladuje oczy ptaka drapieżnego. Skrzydła motyla są pokryte tysiącami łuseczek, które tworzą te przepiękne wzory.',
+    task: 'Rozejrzyj się – czy widzisz jakiegoś motyla? Spróbuj cicho się zbliżyć i narysować go z pamięci po powrocie do domu.',
     image: 'img/card-5.jpg',
     emoji: '🦋'
   },
@@ -55,6 +60,7 @@ const CARDS = [
     token: 'B7NYU',
     title: 'Wiewiórka Baśka',
     desc: 'Trzmiele potrafią latać nawet przy temperaturze 5°C, gdy pszczoły miodne jeszcze siedzą w ulu. Ogrzewają ciało wibrując mięśniami skrzydłowymi jak silnikiem.',
+    task: 'Znajdź kwitnący kwiatek i odczekaj 2 minuty w ciszy. Czy pojawi się trzmiel lub pszczoła?',
     image: 'img/card-6.jpg',
     emoji: '🐝'
   },
@@ -63,6 +69,7 @@ const CARDS = [
     token: 'M3RGK',
     title: 'Hotel dla owadów',
     desc: 'Jedno mrowisko rudnicy może liczyć nawet milion mieszkańców! Mrówki komunikują się za pomocą feromonów – chemicznych sygnałów zapachowych – i razem mogą przenosić ciężary 50-krotnie przekraczające wagę jednej mrówki.',
+    task: 'Znajdź szlak mrówek i policz, ile mrówek przejdzie przez wybrany punkt w ciągu 10 sekund.',
     image: 'img/card-7.jpg',
     emoji: '🐜'
   }
@@ -140,6 +147,7 @@ function openCardModal(card) {
   const img = document.getElementById('modal-img');
   const title = document.getElementById('modal-title');
   const desc = document.getElementById('modal-desc');
+  const task = document.getElementById('modal-task');
 
   img.src = card.image;
   img.alt = card.title;
@@ -148,6 +156,7 @@ function openCardModal(card) {
   };
   title.textContent = card.title;
   desc.textContent = card.desc;
+  task.textContent = card.task || '';
 
   modal.classList.remove('hidden');
 }
