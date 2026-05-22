@@ -15,7 +15,7 @@ const CARDS = [
     token: 'AB3K7',
     title: 'Jeż europejski',
     desc: 'Jeż może mieć nawet 5000 kolców! Każdy kolec to zmodyfikowany włos. Kiedy jeż czuje zagrożenie, zwija się w kulkę i najeża kolce we wszystkich kierunkach.',
-    image: 'images/card-1.jpg',
+    image: 'img/card-1.jpg',
     emoji: '🦔'
   },
   {
@@ -23,7 +23,7 @@ const CARDS = [
     token: 'QR2NP',
     title: 'Biedronka siedmiokropka',
     desc: 'Liczba kropek na pancerzyku biedronki wskazuje jej gatunek, a nie wiek! Biedronka siedmiokropka zjada dziennie nawet 150 mszyc – jest prawdziwym sprzymierzeńcem ogrodników.',
-    image: 'images/card-2.jpg',
+    image: 'img/card-2.jpg',
     emoji: '🐞'
   },
   {
@@ -31,7 +31,7 @@ const CARDS = [
     token: 'XH4WM',
     title: 'Wróbel domowy',
     desc: 'Wróble kąpią się w piasku, by pozbyć się pasożytów z piór. Potrafią zapamiętać twarze ludzkie i rozróżniać przyjaznych ludzi od tych, którym nie ufają.',
-    image: 'images/card-3.jpg',
+    image: 'img/card-3.jpg',
     emoji: '🐦'
   },
   {
@@ -39,7 +39,7 @@ const CARDS = [
     token: 'G9LT6',
     title: 'Żaba trawna',
     desc: 'Żaba trawna może skakać na odległość do metra – to ponad 20-krotność jej własnego ciała! Zimę spędza w letargu pod ziemią lub na dnie stawów.',
-    image: 'images/card-4.jpg',
+    image: 'img/card-4.jpg',
     emoji: '🐸'
   },
   {
@@ -47,7 +47,7 @@ const CARDS = [
     token: 'C4JVZ',
     title: 'Motyl rusałka pawik',
     desc: 'Wzór na skrzydłach rusałki pawik naśladuje oczy ptaka drapieżnego. Skrzydła motyla są pokryte tysiącami łuseczek, które tworzą te przepiękne wzory.',
-    image: 'images/card-5.jpg',
+    image: 'img/card-5.jpg',
     emoji: '🦋'
   },
   {
@@ -55,7 +55,7 @@ const CARDS = [
     token: 'B7NYU',
     title: 'Trzmiel ziemny',
     desc: 'Trzmiele potrafią latać nawet przy temperaturze 5°C, gdy pszczoły miodne jeszcze siedzą w ulu. Ogrzewają ciało wibrując mięśniami skrzydłowymi jak silnikiem.',
-    image: 'images/card-6.jpg',
+    image: 'img/card-6.jpg',
     emoji: '🐝'
   },
   {
@@ -63,7 +63,7 @@ const CARDS = [
     token: 'M3RGK',
     title: 'Mrówka rudnica',
     desc: 'Jedno mrowisko rudnicy może liczyć nawet milion mieszkańców! Mrówki komunikują się za pomocą feromonów – chemicznych sygnałów zapachowych – i razem mogą przenosić ciężary 50-krotnie przekraczające wagę jednej mrówki.',
-    image: 'images/card-7.jpg',
+    image: 'img/card-7.jpg',
     emoji: '🐜'
   }
 ];

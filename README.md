@@ -10,12 +10,12 @@ Prosta aplikacja webowa do gry terenowej na festyn. Użytkownicy skanują kody Q
 index.html     – strona główna aplikacji
 style.css      – style (mobile-first)
 app.js         – logika: karty, localStorage, kody QR, kod finałowy
-images/        – zdjęcia (podmień przed wdrożeniem)
-  map.jpg      – mapa parku (opcjonalna)
-  card-1.jpg   – zdjęcie karty 1
-  card-2.jpg   – zdjęcie karty 2
+img/           – zdjęcia (podmień przed wdrożeniem)
+  mapa.jpg     – mapa parku (opcjonalna)
+  card-1.jpg   – zdjęcie karty 1 (opcjonalne; fallback: emoji)
+  card-2.jpg   – zdjęcie karty 2 (opcjonalne; fallback: emoji)
   ...
-  card-7.jpg   – zdjęcie karty 7
+  card-7.jpg   – zdjęcie karty 7 (opcjonalne; fallback: emoji)
 README.md
 ```
 
@@ -82,14 +82,14 @@ const CARDS = [
     token: 'AB3K7',       // ← zmień na docelowy token QR
     title: 'Jeż europejski',
     desc: 'Ciekawostka…', // ← zmień opis
-    image: 'images/card-1.jpg', // ← podmień plik w images/
+    image: 'img/card-1.jpg',    // ← podmień plik w img/
     emoji: '🦔'           // ← emoji jako fallback gdy brak zdjęcia
   },
   // ...
 ];
 ```
 
-Aby podmienić mapę, umieść plik `images/map.jpg` w repozytorium.
+Aby podmienić mapę, umieść plik `img/mapa.jpg` w repozytorium.
 
 ---
 
