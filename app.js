@@ -13,7 +13,7 @@ const CARDS = [
   {
     id: 1,
     token: 'AB3K7',
-    title: 'Jeż europejski',
+    title: 'Zagraj w Szachy',
     desc: 'Jeż może mieć nawet 5000 kolców! Każdy kolec to zmodyfikowany włos. Kiedy jeż czuje zagrożenie, zwija się w kulkę i najeża kolce we wszystkich kierunkach.',
     image: 'img/card-1.jpg',
     emoji: '🦔'
@@ -21,7 +21,7 @@ const CARDS = [
   {
     id: 2,
     token: 'QR2NP',
-    title: 'Biedronka siedmiokropka',
+    title: 'Ścieżka dydaktyczna',
     desc: 'Liczba kropek na pancerzyku biedronki wskazuje jej gatunek, a nie wiek! Biedronka siedmiokropka zjada dziennie nawet 150 mszyc – jest prawdziwym sprzymierzeńcem ogrodników.',
     image: 'img/card-2.jpg',
     emoji: '🐞'
@@ -29,7 +29,7 @@ const CARDS = [
   {
     id: 3,
     token: 'XH4WM',
-    title: 'Wróbel domowy',
+    title: 'Wybieg dla psów',
     desc: 'Wróble kąpią się w piasku, by pozbyć się pasożytów z piór. Potrafią zapamiętać twarze ludzkie i rozróżniać przyjaznych ludzi od tych, którym nie ufają.',
     image: 'img/card-3.jpg',
     emoji: '🐦'
@@ -37,7 +37,7 @@ const CARDS = [
   {
     id: 4,
     token: 'G9LT6',
-    title: 'Żaba trawna',
+    title: 'Wioska Smerów',
     desc: 'Żaba trawna może skakać na odległość do metra – to ponad 20-krotność jej własnego ciała! Zimę spędza w letargu pod ziemią lub na dnie stawów.',
     image: 'img/card-4.jpg',
     emoji: '🐸'
@@ -45,7 +45,7 @@ const CARDS = [
   {
     id: 5,
     token: 'C4JVZ',
-    title: 'Motyl rusałka pawik',
+    title: 'Dąb "Skaut"',
     desc: 'Wzór na skrzydłach rusałki pawik naśladuje oczy ptaka drapieżnego. Skrzydła motyla są pokryte tysiącami łuseczek, które tworzą te przepiękne wzory.',
     image: 'img/card-5.jpg',
     emoji: '🦋'
@@ -53,7 +53,7 @@ const CARDS = [
   {
     id: 6,
     token: 'B7NYU',
-    title: 'Trzmiel ziemny',
+    title: 'Wiewórka Baśka',
     desc: 'Trzmiele potrafią latać nawet przy temperaturze 5°C, gdy pszczoły miodne jeszcze siedzą w ulu. Ogrzewają ciało wibrując mięśniami skrzydłowymi jak silnikiem.',
     image: 'img/card-6.jpg',
     emoji: '🐝'
@@ -61,7 +61,7 @@ const CARDS = [
   {
     id: 7,
     token: 'M3RGK',
-    title: 'Mrówka rudnica',
+    title: 'Hotel owadów',
     desc: 'Jedno mrowisko rudnicy może liczyć nawet milion mieszkańców! Mrówki komunikują się za pomocą feromonów – chemicznych sygnałów zapachowych – i razem mogą przenosić ciężary 50-krotnie przekraczające wagę jednej mrówki.',
     image: 'img/card-7.jpg',
     emoji: '🐜'
