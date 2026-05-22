@@ -65,6 +65,7 @@ header h1 {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   display: block;
+  cursor: pointer;
 }
 
 .map-placeholder {
@@ -79,6 +80,64 @@ header h1 {
   color: var(--green-dark);
   box-shadow: var(--shadow);
   display: none; /* shown by JS if image missing */
+}
+
+.map-zoom-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-top: 0.35rem;
+  opacity: 0.75;
+}
+
+/* MAP LIGHTBOX */
+#map-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 150;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  cursor: zoom-out;
+}
+
+#map-modal.hidden {
+  display: none;
+}
+
+.map-modal-inner {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0.5rem 1rem;
+}
+
+#map-modal-close {
+  position: fixed;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#map-modal-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  touch-action: pan-x pan-y pinch-zoom;
 }
 
 /* =============================================

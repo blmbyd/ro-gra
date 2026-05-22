@@ -174,6 +174,28 @@ function showFinalBanner(code) {
 }
 
 /* =============================================
+   ZOOM MAPY
+   ============================================= */
+function initMapZoom() {
+  const mapImg = document.getElementById('park-map');
+  const modal  = document.getElementById('map-modal');
+  const closeBtn = document.getElementById('map-modal-close');
+
+  mapImg.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+  });
+
+  closeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    modal.classList.add('hidden');
+  });
+
+  modal.addEventListener('click', e => {
+    if (e.target === modal) modal.classList.add('hidden');
+  });
+}
+
+/* =============================================
    RENDEROWANIE KART
    ============================================= */
 function renderCards(discovered, newlyDiscoveredId = null) {
@@ -341,6 +363,9 @@ function init() {
     mapImg.style.display = 'none';
     mapPlaceholder.style.display = 'flex';
   }
+
+  // 7. Zoom mapy
+  initMapZoom();
 }
 
 /* =============================================

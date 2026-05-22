@@ -15,9 +15,18 @@
 
   <!-- Mapa parku -->
   <section id="map-section">
-    <img id="park-map" src="images/map.jpg" alt="Mapa parku" onerror="this.style.display='none'" />
-    <div id="map-placeholder" class="map-placeholder">🗺️ Mapa parku</div>
+    <img id="park-map" src="img/mapa.jpg" alt="Mapa parku" onerror="this.style.display='none'" />
+    <div id="map-placeholder" class="map-placeholder">Mapa parku</div>
+    <p class="map-zoom-hint">Dotknij mapę, aby powiększyć</p>
   </section>
+
+  <!-- Modal powiększenia mapy -->
+  <div id="map-modal" class="hidden" role="dialog" aria-modal="true">
+    <div class="map-modal-inner">
+      <button id="map-modal-close" aria-label="Zamknij">&times;</button>
+      <img id="map-modal-img" src="img/mapa.jpg" alt="Mapa parku" />
+    </div>
+  </div>
 
   <!-- Licznik postępu -->
   <section id="progress-section">
