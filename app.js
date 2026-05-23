@@ -362,15 +362,21 @@ function init() {
   // 2. Obsłuż parametr QR (pomijany gdy wykonano akcję administracyjną)
   const { status, card } = adminAction === 'none' ? handleQrParam() : { status: 'none', card: null };
 
-  // 3. Odczytaj stan
-  const discovered = getDiscovered();
+  // 3. Przed startem gry wyczyść localStorage (chyba że właśnie wykonano reveal-all)
+  if (!isGameStarted() && adminAction !== 'reveal-all') {
+    localStorage.removeItem(LS_DISCOVERED);
+    localStorage.removeItem(LS_FINAL_CODE);
+  }
+
+  // 4. Odczytaj stan
+  const discovered = (isGameStarted() || adminAction === 'reveal-all') ? getDiscovered() : [];
   const count = discovered.length;
 
-  // 4. Renderuj UI
+  // 5. Renderuj UI
   renderCards(discovered, status === 'ok' ? card.id : null);
   updateProgress(count);
 
-  // 5. Pokaż komunikat zależny od wykonanej akcji
+  // 6. Pokaż komunikat zależny od wykonanej akcji
   if (adminAction === 'reset') {
     showToast('Postęp zresetowany.', 'info', 3500);
   } else if (adminAction === 'reveal-all') {
@@ -386,7 +392,7 @@ function init() {
     showToast('⏳ Gra startuje 24 maja o 13:00. Wróć później!', 'info', 5000);
   }
 
-  // 6. Jeśli wszystkie odkryte – generuj lub pokaż kod finałowy
+  // 7. Jeśli wszystkie odkryte – generuj lub pokaż kod finałowy
   if (count === TOTAL) {
     let code = getFinalCode();
     if (!code) {
@@ -399,7 +405,7 @@ function init() {
     setTimeout(() => showFinalScreen(code), delay);
   }
 
-  // 6. Pokaż mapę lub placeholder
+  // 8. Pokaż mapę lub placeholder
   const mapImg = document.getElementById('park-map');
   const mapPlaceholder = document.getElementById('map-placeholder');
   mapImg.addEventListener('error', () => {
