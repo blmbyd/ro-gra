@@ -143,6 +143,12 @@ header h1 {
 /* =============================================
    PROGRESS
    ============================================= */
+#browser-hint-section {
+  max-width: 480px;
+  margin: 0.75rem auto 0;
+  padding: 0 1rem;
+}
+
 #progress-section {
   max-width: 480px;
   margin: 0 auto 1rem;
