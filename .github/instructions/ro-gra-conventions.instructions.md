@@ -8,7 +8,7 @@ applyTo: "**"
 ## Language Split
 
 - Code identifiers, HTML attributes, CSS class names, JS variable and function names: **English**
-- User-visible UI strings, HTML text content, in-code comments, and `README.md` documentation: **Polish**
+- User-visible UI strings, HTML text content, in-code comments (JS, CSS, and HTML comments), and `README.md` documentation: **Polish**
 - Never translate Polish content to English unless explicitly asked
 
 ## Vanilla JS Constraints
@@ -25,7 +25,7 @@ Each card object must contain exactly these fields:
 | Field   | Type   | Rules |
 |---------|--------|-------|
 | `id`    | number | Sequential starting from 1 |
-| `token` | string | Exactly 5 characters, uppercase, from alphabet `ABCDEFGHJKLMNPQRSTUVWXYZ2346789` (excludes I, O, 0, 1, 5) |
+| `token` | string | Exactly 5 characters, uppercase, from alphabet `ABCDEFGHJKLMNPQRSTUVWXYZ2346789` (excludes I, O, 0, 1, 5). Must be unique across all cards — verify no existing card uses the same token before adding. |
 | `title` | string | Polish — short location or attraction name |
 | `desc`  | string | Polish — fun fact or story shown on the card |
 | `task`  | string | Polish — physical or observational challenge for the player |
@@ -78,7 +78,7 @@ When `ALLOWED_ORIGIN` changes (e.g. repository renamed), update `config.php` and
 Whenever you edit `style.css`, update the `?v=` query string in `index.html`:
 
 ```html
-<link rel="stylesheet" href="style.css?v=YYYYMMDDHHII" />
+<link rel="stylesheet" href="style.css?v=YYYYMMDDHHmm" />
 ```
 
 Use the current date and time in `YYYYMMDDHHmm` format (24-hour, local time).
