@@ -23,7 +23,8 @@ jobs:
           username:   ${{ secrets.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
           local-dir:  ./backend-php/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: /
+          security:   loose
           # Nie nadpisuj danych uczestników zebranych na produkcji
           exclude: |
             **/.git*
