@@ -1,5 +1,8 @@
-/* Data i godzina startu gry */
+// Data i godzina startu gry
 const GAME_START = new Date('2026-05-24T13:00:00+02:00').getTime();
+
+// Adres backendu PHP. Ustaw przed wdrożeniem. Zostaw pusty żeby wyłączyć API.
+const API_BASE_URL = 'https://stuczynski.eu/ro-gra/';
 
 /* =============================================
    DANE KART
@@ -79,9 +82,6 @@ const LS_FINAL_CODE = 'rogra_final_code';  // klucz w localStorage
 
 // Alfabet liter do kodu finałowego
 const FINAL_LETTER_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-
-// Adres backendu PHP. Ustaw przed wdrożeniem. Zostaw pusty żeby wyłączyć API.
-const API_BASE_URL = '';
 
 // Klucz localStorage – czy kod finałowy został już wysłany do API
 const LS_API_SUBMITTED = 'rogra_api_submitted';

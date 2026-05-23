@@ -12,10 +12,10 @@
 
 // Hash hasła administratora panelu.
 // Dopóki nie zmienisz tego placeholdera, panel admina jest niedostępny.
-define('ADMIN_PASSWORD_HASH', 'REPLACE_WITH_BCRYPT_HASH');
+define('ADMIN_PASSWORD_HASH', '$2y$10$JT1bGNARAa3InpigNSIeTO9amEAy/.kw1MaXuTx9JppqerPC9q.Ke');
 
 // Dozwolony origin frontendu (GitHub Pages). Bez końcowego slasha.
-define('ALLOWED_ORIGIN', 'https://REPLACE_WITH_YOUR_GITHUB_PAGES_ORIGIN');
+define('ALLOWED_ORIGIN', 'https://blmbyd.github.io');
 
 // Ścieżka do pliku JSON z danymi uczestników.
 define('DATA_FILE', __DIR__ . '/../storage/entries.json');
