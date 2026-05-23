@@ -1,4 +1,4 @@
-name: Wdróż backend PHP przez FTP
+name: FTP Deploy Backend
 
 on:
   push:
