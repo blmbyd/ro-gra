@@ -12,10 +12,10 @@ style.css      – style (mobile-first)
 app.js         – logika: karty, localStorage, kody QR, kod finałowy
 img/           – zdjęcia (podmień przed wdrożeniem)
   mapa.jpg     – mapa parku (opcjonalna)
-  card-1.jpg   – zdjęcie karty 1 (opcjonalne; fallback: emoji)
-  card-2.jpg   – zdjęcie karty 2 (opcjonalne; fallback: emoji)
+  card-1.jpg   – zdjęcie karty 1 (opcjonalne)
+  card-2.jpg   – zdjęcie karty 2 (opcjonalne)
   ...
-  card-7.jpg   – zdjęcie karty 7 (opcjonalne; fallback: emoji)
+  card-7.jpg   – zdjęcie karty 7 (opcjonalne)
 README.md
 ```
 
@@ -82,8 +82,7 @@ const CARDS = [
     token: 'AB3K7',       // ← zmień na docelowy token QR
     title: 'Jeż europejski',
     desc: 'Ciekawostka…', // ← zmień opis
-    image: 'img/card-1.jpg',    // ← podmień plik w img/
-    emoji: '🦔'           // ← emoji jako fallback gdy brak zdjęcia
+    image: 'img/card-1.jpg'     // ← podmień plik w img/
   },
   // ...
 ];

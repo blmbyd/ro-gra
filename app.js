@@ -10,7 +10,6 @@ const GAME_START = new Date('2026-05-24T13:00:00+02:00').getTime();
      title   – nazwa stworzenia
      desc    – ciekawostka
      image   – ścieżka do zdjęcia (względna od index.html)
-     emoji   – wyświetlany gdy brak zdjęcia
    ============================================= */
 const CARDS = [
   {
@@ -19,8 +18,7 @@ const CARDS = [
     title: 'Zagraj w Szachy',
     desc: 'Szachy to jedna z najstarszych gier na świecie – ma ponad 1500 lat! Dawno temu zamiast pionków na planszy stały figurki prawdziwych słoni bojowych i rydwanów.',
     task: 'Policz, ile małych kwadracików (pól) znajduje się na całej szachownicy. Podpowiedź: jest ich więcej niż 50!',
-    image: 'img/card-1.jpg',
-    emoji: '♟️'
+    image: 'img/card-1.jpg'
   },
   {
     id: 2,
@@ -28,8 +26,7 @@ const CARDS = [
     title: 'Ścieżka dydaktyczna',
     desc: 'Kiedy kładziesz się spać, w parku zaczyna się wielka impreza! Na tej tablicy ukryły się zwierzęta, które uwielbiają ciemność. Jedno z nich ma tysiące igieł, a w nocy drepcze po parku i poluje na ślimaki.',
     task: 'W jak małą szczelinę (ile centymetrów) potrafi wcisnąć się najmniejszy nietoperz?',
-    image: 'img/card-2.jpg',
-    emoji: '🦔'
+    image: 'img/card-2.jpg'
   },
   {
     id: 3,
@@ -37,8 +34,7 @@ const CARDS = [
     title: 'Wybieg dla psów',
     desc: 'Psy potrafią rozpoznać Twój nastrój po samym zapachu! Ich nosy są tak niesamowite, że wyczuwają nawet to, czy jesteś wesoły, czy zmęczony.',
     task: 'Wyobraź sobie, że biegniesz po torze przeszkód tak szybko jak zwinny piesek. Zrób 5 pajacyków na start!',
-    image: 'img/card-3.jpg',
-    emoji: '�'
+    image: 'img/card-3.jpg'
   },
   {
     id: 4,
@@ -46,8 +42,7 @@ const CARDS = [
     title: 'Wioska Smerfów',
     desc: 'Smerfy mają dokładnie po 3 jabłka wzrostu i mieszkają w domkach z grzybów. Ten niebieski stworek na pniu pilnuje wejścia do ich leśnego świata!',
     task: 'Zawołaj głośno: „Jak ja nie cierpię smerfów!” głosem Gargamela.',
-    image: 'img/card-4.jpg',
-    emoji: '🍄'
+    image: 'img/card-4.jpg'
   },
   {
     id: 5,
@@ -55,8 +50,7 @@ const CARDS = [
     title: 'Dąb "Skaut"',
     desc: 'Ten dąb to żywy pomnik! Został posadzony na cześć harcerzy z drużyny „Zielona Siódemka”, która powstała aż 100 lat temu. Harcerze (nazywani też skautami) uwielbiają przyrodę, potrafią rozpalać ogniska bez zapałek i posługują się tajnymi szyframi.',
     task: 'Odszukaj pod drzewem pamiątkowy kamień. Jaki numer ma ukryta na nim harcerska drużyna?',
-    image: 'img/card-5.jpg',
-    emoji: '🌳'
+    image: 'img/card-5.jpg'
   },
   {
     id: 6,
@@ -64,8 +58,7 @@ const CARDS = [
     title: 'Wiewiórka Baśka',
     desc: 'Wiewiórki to najlepsi leśny ogrodnicy. Często zakopują orzechy w ziemi i zapominają, gdzie je schowały – dzięki temu wyrastają z nich nowe drzewa!',
     task: 'Rozejrzyj się uważnie dookoła. Czy gdzieś na gałęzi albo na trawie nie błyska ruda kita Basi?',
-    image: 'img/card-6.jpg',
-    emoji: '�️'
+    image: 'img/card-6.jpg'
   },
   {
     id: 7,
@@ -73,8 +66,7 @@ const CARDS = [
     title: 'Hotel dla owadów',
     desc: 'Ten niezwykły domek z gliny, drewna i rurek to schronisko dla dzikich pszczół i innych pomocnych robaczków. Nie robią one miodu, ale za to ciężko pracują, zapylając kwiaty i drzewa w parku.',
     task: 'Podejdź cicho i sprawdź, czy w małych otworach widać już jakichś sypiających lokatorów. Pamiętaj – nie hałasuj, trwa doba hotelowa!',
-    image: 'img/card-7.jpg',
-    emoji: '�'
+    image: 'img/card-7.jpg'
   }
 ];
 
@@ -266,8 +258,7 @@ function renderCards(discovered, newlyDiscoveredId = null) {
     if (isDiscovered) {
       el.innerHTML = `
         <div class="card-img-wrap">
-          <img src="${card.image}" alt="${card.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="card-img-placeholder" style="display:none">${card.emoji}</div>
+          <img src="${card.image}" alt="${card.title}" />
         </div>
         <div class="card-body">
           <div class="card-title">${card.title}</div>
