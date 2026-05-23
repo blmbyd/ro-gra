@@ -286,6 +286,7 @@ header h1 {
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -536,4 +537,54 @@ header h1 {
   font-size: 0.8rem;
   color: var(--text-mid);
   margin-top: 0.5rem;
+}
+
+/* =============================================
+   COUNTDOWN BANNER (przed startem gry)
+   ============================================= */
+.countdown-banner {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--green-mid);
+  text-align: center;
+  padding: 1rem 1.2rem 1.2rem;
+  max-width: 480px;
+  margin: 0 auto 1rem;
+}
+
+.countdown-banner.hidden {
+  display: none;
+}
+
+.countdown-label {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.countdown-remaining {
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  margin-bottom: 0.3rem;
+}
+
+.countdown-timer {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--green-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+
+.countdown-hint {
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  line-height: 1.45;
+  margin: 0;
 }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Co piszczy w trawie w naszym parku</title>
-  <link rel="stylesheet" href="style.css?v=202605221920" />
+  <link rel="stylesheet" href="style.css?v=202605231533" />
 </head>
 <body>
 
@@ -26,6 +26,14 @@
       <button id="map-modal-close" aria-label="Zamknij">&times;</button>
       <img id="map-modal-img" src="img/mapa.jpg" alt="Mapa parku" />
     </div>
+  </div>
+
+  <!-- Odliczanie do startu gry -->
+  <div id="countdown-banner" class="countdown-banner hidden">
+    <p class="countdown-label">Gra startuje 24 maja o 13:00</p>
+    <p class="countdown-remaining">Do startu pozostało:</p>
+    <div id="countdown-timer" class="countdown-timer">--:--:--</div>
+    <p class="countdown-hint">Do tego czasu wyświetlana jest mapa bez oznaczeń punktów.<br>Skanowanie kodów QR jest zablokowane.</p>
   </div>
 
   <!-- Licznik postępu -->

@@ -1,3 +1,6 @@
+/* Data i godzina startu gry */
+const GAME_START = new Date('2026-05-24T13:00:00+02:00').getTime();
+
 /* =============================================
    DANE KART
    Aby podmienić treści: edytuj tablicę CARDS.
@@ -85,6 +88,45 @@ const LS_FINAL_CODE = 'rogra_final_code';  // klucz w localStorage
 // Alfabet liter do kodu finałowego
 const FINAL_LETTER_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 
+/** Zwraca true gdy gra już wystartowała. */
+function isGameStarted() {
+  return Date.now() >= GAME_START;
+}
+
+/** Formatuje pozostały czas do startu jako HH:MM:SS. */
+function formatCountdown(ms) {
+  if (ms <= 0) return '0:00:00';
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const pad = n => String(n).padStart(2, '0');
+  return `${h}:${pad(m)}:${pad(s)}`;
+}
+
+let countdownInterval = null;
+
+/** Uruchamia odliczanie w #countdown-banner. Po wybiciu godziny przeładowuje stronę. */
+function startCountdown() {
+  const banner = document.getElementById('countdown-banner');
+  const timerEl = document.getElementById('countdown-timer');
+  if (!banner || !timerEl) return;
+  banner.classList.remove('hidden');
+
+  function tick() {
+    const remaining = GAME_START - Date.now();
+    if (remaining <= 0) {
+      clearInterval(countdownInterval);
+      window.location.reload();
+      return;
+    }
+    timerEl.textContent = formatCountdown(remaining);
+  }
+
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
 /* =============================================
    POMOCNICZE – localStorage
    ============================================= */
@@ -98,8 +140,9 @@ function getDiscovered() {
   }
 }
 
-/** Zapisuje tablicę ID odkrytych kart. */
-function saveDiscovered(ids) {
+/** Zapisuje tablicę ID odkrytych kart. Przed startem gry zapis jest pomijany, chyba że force=true. */
+function saveDiscovered(ids, force = false) {
+  if (!force && !isGameStarted()) return;
   localStorage.setItem(LS_DISCOVERED, JSON.stringify(ids));
 }
 
@@ -108,8 +151,9 @@ function getFinalCode() {
   return localStorage.getItem(LS_FINAL_CODE) || null;
 }
 
-/** Zapisuje kod finałowy. */
-function saveFinalCode(code) {
+/** Zapisuje kod finałowy. Przed startem gry zapis jest pomijany, chyba że force=true. */
+function saveFinalCode(code, force = false) {
+  if (!force && !isGameStarted()) return;
   localStorage.setItem(LS_FINAL_CODE, code);
 }
 
@@ -271,6 +315,8 @@ function handleQrParam() {
 
   if (!token) return { status: 'none', card: null };
 
+  if (!isGameStarted()) return { status: 'locked', card: null };
+
   const card = CARDS.find(c => c.token === token.toUpperCase());
   if (!card) return { status: 'invalid', card: null };
 
@@ -307,8 +353,8 @@ function handleAdminParam() {
   }
 
   if (action === 'reveal-all') {
-    saveDiscovered(CARDS.map(c => c.id));
-    saveFinalCode(generateFinalCode());
+    saveDiscovered(CARDS.map(c => c.id), true);
+    saveFinalCode(generateFinalCode(), true);
     return 'reveal-all';
   }
 
@@ -345,6 +391,8 @@ function init() {
     showToast(`ℹ️ Karta "${card.title}" była już odkryta.`, 'info', 3500);
   } else if (status === 'invalid') {
     showToast('❌ Nieznany kod QR. Spróbuj zeskanować ponownie.', 'error', 4000);
+  } else if (status === 'locked') {
+    showToast('⏳ Gra startuje 24 maja o 13:00. Wróć później!', 'info', 5000);
   }
 
   // 6. Jeśli wszystkie odkryte – generuj lub pokaż kod finałowy
@@ -371,6 +419,14 @@ function init() {
   if (mapImg.complete && mapImg.naturalWidth === 0) {
     mapImg.style.display = 'none';
     mapPlaceholder.style.display = 'flex';
+  }
+
+  // 8. Przed startem gry: podmień mapę i uruchom odliczanie
+  if (!isGameStarted()) {
+    const preStartSrc = 'img/mapa-start.jpg';
+    mapImg.src = preStartSrc;
+    document.getElementById('map-modal-img').src = preStartSrc;
+    startCountdown();
   }
 
   // 7. Zoom mapy
