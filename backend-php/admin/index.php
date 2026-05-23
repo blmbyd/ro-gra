@@ -303,12 +303,9 @@ function status_label(string $status): string
        RESPONSYWNOSC – MEDIA QUERIES
        ============================================= */
 
-    /* <= 768 px: tabela – mniejsze odstepy, ukrycie kolumny Zaktualizowano */
+    /* <= 768 px: tabela – mniejsze odstepy na tabletach */
     @media (max-width: 768px) {
       th, td { padding: 0.5rem 0.6rem; font-size: 0.8rem; }
-      th:nth-child(5), td:nth-child(5) { display: none; }
-      .name-cell { max-width: 150px; }
-      .actions-cell { white-space: normal; }
     }
 
     /* <= 680 px: formularz edycji – uklad pionowy */
@@ -322,11 +319,50 @@ function status_label(string $status): string
       .btn-cancel { margin-top: 0.4rem; }
     }
 
-    /* <= 640 px: naglowek – uklad pionowy */
+    /* <= 640 px: naglowek + tabela jako karty */
     @media (max-width: 640px) {
       .admin-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.8rem 1rem; }
       .admin-header h1 { font-size: 1rem; }
       .btn-sm { align-self: flex-start; }
+
+      .table-wrap { overflow-x: visible; }
+      table { box-shadow: none; border-radius: 0; background: transparent; }
+      thead { display: none; }
+      tbody, tr { display: block; }
+      tr {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        overflow: hidden;
+      }
+      tr:hover td { background: transparent; }
+      tr:last-child td { border-bottom: 1px solid #f0f0f0; }
+      tr:last-child td:last-child { border-bottom: none; }
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.55rem 0.9rem;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 0.875rem;
+      }
+      td:last-child { border-bottom: none; }
+      td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-size: 0.75rem;
+        color: #888;
+        min-width: 110px;
+        flex-shrink: 0;
+      }
+      td.empty { justify-content: center; }
+      td.empty::before { display: none; }
+      .name-cell { max-width: none; white-space: normal; overflow: visible; text-overflow: clip; }
+      .date-cell { white-space: normal; }
+      .actions-cell { white-space: normal; flex-wrap: wrap; gap: 0.3rem; }
+      .code-cell { letter-spacing: 0.03em; }
     }
 
     /* <= 480 px: statystyki i filtr – jednokolumnowy */
@@ -458,14 +494,14 @@ function status_label(string $status): string
         <?php else: ?>
           <?php foreach ($entries as $e): ?>
           <tr>
-            <td class="code-cell"><?= esc($e['final_code']) ?></td>
-            <td class="name-cell" title="<?= esc($e['full_name']) ?>">
+            <td class="code-cell" data-label="Kod"><?= esc($e['final_code']) ?></td>
+            <td class="name-cell" data-label="Nazwisko" title="<?= esc($e['full_name']) ?>">
               <?= $e['full_name'] !== '' ? esc($e['full_name']) : '<span style="color:#aaa">—</span>' ?>
             </td>
-            <td><?= status_label($e['status']) ?></td>
-            <td class="date-cell"><?= esc($e['created_at']) ?></td>
-            <td class="date-cell"><?= esc($e['updated_at']) ?></td>
-            <td class="actions-cell">
+            <td data-label="Status"><?= status_label($e['status']) ?></td>
+            <td class="date-cell" data-label="Zgłoszono"><?= esc($e['created_at']) ?></td>
+            <td class="date-cell" data-label="Zaktualizowano"><?= esc($e['updated_at']) ?></td>
+            <td class="actions-cell" data-label="Akcje">
               <a href="?edit=<?= urlencode($e['final_code']) ?><?= $filter ? '&q=' . urlencode($filter) : '' ?>"
                  class="btn-edit-link">Edytuj</a>
               <form method="post" style="display:inline"
