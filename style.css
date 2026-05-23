@@ -189,6 +189,78 @@ header h1 {
 }
 
 /* =============================================
+   MANUAL CODE ENTRY
+   ============================================= */
+#manual-code-section {
+  max-width: 480px;
+  margin: 0 auto 1rem;
+  padding: 0 1rem;
+}
+
+.manual-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  margin-bottom: 0.45rem;
+}
+
+.manual-form {
+  margin-top: 0.6rem;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  box-shadow: var(--shadow);
+}
+
+.manual-form-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#manual-code-input {
+  flex: 1;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 2px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+
+#manual-code-input:focus {
+  border-color: var(--green-mid);
+}
+
+#manual-code-submit {
+  background: var(--green-mid);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+#manual-code-submit:hover {
+  background: var(--green-dark);
+}
+
+.manual-hint {
+  margin-top: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  opacity: 0.8;
+}
+
+/* =============================================
    CARDS GRID
    ============================================= */
 #cards-section {

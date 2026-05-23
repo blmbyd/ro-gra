@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Co piszczy w trawie w naszym parku</title>
-  <link rel="stylesheet" href="style.css?v=202605231551" />
+  <link rel="stylesheet" href="style.css?v=202605231600" />
 </head>
 <body>
 
@@ -46,6 +46,27 @@
     <p id="progress-text">Odkryto: <span id="count">0</span> / 7 kart</p>
     <div id="progress-bar-wrap">
       <div id="progress-bar"></div>
+    </div>
+  </section>
+
+  <!-- Ręczne wpisywanie kodu -->
+  <section id="manual-code-section">
+    <p class="manual-label">Wpisz kod ręcznie:</p>
+    <div id="manual-code-form" class="manual-form">
+      <div class="manual-form-row">
+        <input
+          id="manual-code-input"
+          type="text"
+          maxlength="5"
+          placeholder="Np. AB3K7"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="characters"
+          spellcheck="false"
+        />
+        <button id="manual-code-submit">Sprawdz</button>
+      </div>
+      <p class="manual-hint">Wpisz 5-znakowy kod wydrukowany przy stanowisku.</p>
     </div>
   </section>
 

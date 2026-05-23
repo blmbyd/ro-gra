@@ -434,6 +434,54 @@ function init() {
 }
 
 /* =============================================
+   RĘCZNE WPISYWANIE KODU
+   ============================================= */
+function handleManualToken(rawToken) {
+  const token = (rawToken || '').trim().toUpperCase();
+
+  if (!token) {
+    showToast('Wpisz kod ze stanowiska.', 'error', 3000);
+    return;
+  }
+
+  if (!isGameStarted()) {
+    showToast('Gra startuje 24 maja o 13:00. Wróc pozniej!', 'info', 5000);
+    return;
+  }
+
+  const card = CARDS.find(c => c.token === token);
+  if (!card) {
+    showToast('Nieznany kod. Sprawdz, czy wpisales go dokladnie.', 'error', 4000);
+    return;
+  }
+
+  const discovered = getDiscovered();
+  if (discovered.includes(card.id)) {
+    showToast(`Karta "${card.title}" byla juz odkryta.`, 'info', 3500);
+    openCardModal(card);
+    return;
+  }
+
+  discovered.push(card.id);
+  saveDiscovered(discovered);
+
+  renderCards(discovered, card.id);
+  updateProgress(discovered.length);
+  showToast(`Odkryto nowa karte: ${card.title}!`, 'success', 4000);
+  openCardModal(card);
+
+  if (discovered.length === TOTAL) {
+    let code = getFinalCode();
+    if (!code) {
+      code = generateFinalCode();
+      saveFinalCode(code);
+    }
+    showFinalBanner(code);
+    setTimeout(() => showFinalScreen(code), 1800);
+  }
+}
+
+/* =============================================
    OBSŁUGA ZDARZEŃ
    ============================================= */
 document.getElementById('modal-close').addEventListener('click', closeCardModal);
@@ -443,6 +491,20 @@ document.getElementById('card-modal').addEventListener('click', e => {
 });
 
 document.getElementById('final-close').addEventListener('click', closeFinalScreen);
+
+document.getElementById('manual-code-submit').addEventListener('click', () => {
+  const input = document.getElementById('manual-code-input');
+  handleManualToken(input.value);
+  input.value = '';
+});
+
+document.getElementById('manual-code-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const input = document.getElementById('manual-code-input');
+    handleManualToken(input.value);
+    input.value = '';
+  }
+});
 
 /* =============================================
    START
