@@ -1,5 +1,5 @@
 /* Data i godzina startu gry */
-const GAME_START = new Date('2026-05-24T13:00:00+02:00').getTime();
+const GAME_START = new Date('2026-05-23T13:00:00+02:00').getTime();
 
 /* =============================================
    DANE KART
