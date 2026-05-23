@@ -24,7 +24,8 @@ jobs:
           password:   ${{ secrets.FTP_PASSWORD }}
           local-dir:  ./backend-php/
           server-dir: /
-          security:   loose
+          protocol:   ftps
+          port:       21
           # Nie nadpisuj danych uczestników zebranych na produkcji
           exclude: |
             **/.git*
