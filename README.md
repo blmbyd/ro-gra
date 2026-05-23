@@ -2,6 +2,12 @@
 
 Prosta aplikacja webowa do gry terenowej na festyn. Użytkownicy skanują kody QR ukryte w parku i odkrywają 7 kart z ciekawostkami o parkowych stworzeniach. Po zebraniu wszystkich kart otrzymują unikalny kod finałowy.
 
+## Losowanie nagród i odbiór upominków
+
+- Zabawa odbywa się podczas festynu w parku w godzinach **13:00–17:00**.
+- Po zebraniu wszystkich 7 kart uczestnik zgłasza się do **Rady Osiedla**, aby odebrać upominek.
+- Losowanie głównej nagrody odbywa się na **scenie między 16:00 a 16:30**.
+
 ---
 
 ## Struktura projektu

@@ -638,6 +638,21 @@ header h1 {
   color: var(--text-mid);
 }
 
+.final-info {
+  background: var(--green-pale);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--green-mid);
+  padding: 0.7rem 1rem;
+  margin: 0.8rem 0 0.6rem;
+  text-align: left;
+}
+
+.final-info p {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  margin: 0.25rem 0;
+}
+
 #final-close {
   margin-top: 1.2rem;
   background: var(--green-dark);

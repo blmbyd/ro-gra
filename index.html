@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Co piszczy w trawie w naszym parku</title>
-  <link rel="stylesheet" href="style.css?v=202605231800" />
+  <link rel="stylesheet" href="style.css?v=202605231802" />
 </head>
 <body>
 
   <!-- Nagłówek -->
   <header>
-    <h1>Co piszczy w trawie<br>w naszym parku?</h1>
+    <h1>Co piszczy w trawie w naszym parku?</h1>
+    <h3>Festyn Rodzinny "Razem na Leśnym"</h3>
+    <h4>24 maja 2026, godz. 13:00&ndash;17:00</h4>
   </header>
 
   <!-- Wskazowka przegladarki -->
@@ -45,6 +47,7 @@
           <li>Po zebraniu wszystkich kart pojawi się kod finałowy.</li>
           <li>Jeśli skaner nie zadziała, wpisz kod ręcznie poniżej.</li>
           <li>Przed startem mapa nie pokazuje wszystkich punktów.</li>
+          <li>Zabawa odbywa się podczas naszego festynu w parku w godzinach 13:00&ndash;17:00.</li>
         </ul>
       </div>
     </details>
@@ -91,7 +94,7 @@
   <section id="final-banner" class="final-banner hidden">
     <p class="final-banner-label">Twój kod finałowy:</p>
     <div id="final-banner-code" class="final-code"></div>
-    <p class="final-banner-hint">Pokaż ten kod organizatorowi festynu, aby odebrać upominek i wziąć udział w losowaniu nagród!</p>
+    <p class="final-banner-hint">Pokaż ten kod organizatorowi festynu, <br/>aby odebrać upominek i wziąć udział w losowaniu nagród!</p>
   </section>
 
   <!-- Siatka kart -->
@@ -130,7 +133,10 @@
       <p>Odkryłeś/aś wszystkie 7 kart!</p>
       <p>Twój kod finałowy:</p>
       <div id="final-code" class="final-code"></div>
-      <p class="final-hint">Pokaż ten kod organizatorowi festynu, aby odebrać upominek i wziąć udział w losowaniu nagród!</p>
+      <div class="final-info">
+        <p>Po zebraniu wszystkich kart <strong>zgłoś się do stoiska Rady Osiedla</strong>, aby odebrać upominek.</p>
+        <p>Losowanie głównej nagrody odbędzie się na scenie między <strong>16:00 a 16:30</strong>.</p>
+      </div>
       <button id="final-close">Wróć do mapy</button>
     </div>
   </div>
