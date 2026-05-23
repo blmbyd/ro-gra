@@ -28,7 +28,7 @@ backend-php/        – backend urny (wdrażany oddzielnie przez FTP, nie na Git
     submit.php      – POST: rejestracja kodu finałowego
     update-name.php – POST: zapis imienia i nazwiska uczestnika
   admin/
-    index.php       – ukryty panel administracyjny (logowanie, lista, edycja, usuwanie)
+    index.php       – panel administracyjny: lista zgłoszeń widoczna publicznie, akcje (edycja/usuwanie) wymagał logowania
   storage/
     .htaccess       – blokada bezpośredniego dostępu HTTP do katalogu
     entries.json    – dane uczestników (tworzony automatycznie przy pierwszym zapisie)
@@ -198,7 +198,11 @@ Panel jest dostępny bezpośrednio pod adresem serwera PHP, np.:
 https://twoj-serwer.pl/admin/
 ```
 
-Nie jest linkowany ani opisany publicznie. Możesz w nim przeglądać, edytować i usuwać zgłoszenia. Status wpisu: **Nowe** / **Odebrane** / **Nieprawidłowe**.
+Nie jest linkowany ani opisany publicznie.
+
+**Widok publiczny (bez logowania):** lista wszystkich zgłoszeń z filtrowaniem i sortowaniem, statystyki oraz formularz logowania. Brak możliwości modyfikacji danych.
+
+**Widok administracyjny (po zalogowaniu):** dodatkowo dostępne przyciski edycji i usuwania wpisów, formularz zmiany statusu oraz przycisk usunięcia wszystkich zgłoszeń. Status wpisu: **Nowe** / **Odebrane** / **Nieprawidłowe**.
 
 ### Dane uczestników
 

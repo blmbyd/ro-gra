@@ -141,50 +141,48 @@ $sort         = 'created_at';
 $sort_dir     = 'desc';
 $allowed_sort = ['created_at', 'updated_at', 'full_name', 'final_code', 'status'];
 
-// Edytowany wpis (gdy ?edit=CODE w URL)
+// Edytowany wpis (gdy ?edit=CODE w URL) – ładowany tylko po zalogowaniu
 $edit_entry = null;
 
-if ($is_logged_in) {
-    $all_data = read_json();
-    $entries  = array_values($all_data);
+$all_data   = read_json();
+$entries    = array_values($all_data);
 
-    // Filtrowanie
-    $filter     = trim(strip_tags($_GET['q'] ?? ''));
-    $hide_empty = isset($_GET['hide_empty']);
-    if ($filter !== '') {
-        $fl = mb_strtolower($filter);
-        $entries = array_values(array_filter($entries, static function (array $e) use ($fl): bool {
-            return strpos(mb_strtolower($e['final_code']), $fl) !== false
-                || strpos(mb_strtolower($e['full_name']),  $fl) !== false;
-        }));
-    }
-    if ($hide_empty) {
-        $entries = array_values(array_filter($entries, static fn(array $e): bool => $e['full_name'] !== ''));
-    }
+// Filtrowanie
+$filter     = trim(strip_tags($_GET['q'] ?? ''));
+$hide_empty = isset($_GET['hide_empty']);
+if ($filter !== '') {
+    $fl = mb_strtolower($filter);
+    $entries = array_values(array_filter($entries, static function (array $e) use ($fl): bool {
+        return strpos(mb_strtolower($e['final_code']), $fl) !== false
+            || strpos(mb_strtolower($e['full_name']),  $fl) !== false;
+    }));
+}
+if ($hide_empty) {
+    $entries = array_values(array_filter($entries, static fn(array $e): bool => $e['full_name'] !== ''));
+}
 
-    // Sortowanie
-    $sort     = in_array($_GET['sort'] ?? '', $allowed_sort, true) ? $_GET['sort'] : 'created_at';
-    $sort_dir = ($_GET['dir'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
-    usort($entries, static function (array $a, array $b) use ($sort): int {
-        return strcmp((string)($a[$sort] ?? ''), (string)($b[$sort] ?? ''));
-    });
-    if ($sort_dir === 'desc') {
-        $entries = array_reverse($entries);
-    }
+// Sortowanie
+$sort     = in_array($_GET['sort'] ?? '', $allowed_sort, true) ? $_GET['sort'] : 'created_at';
+$sort_dir = ($_GET['dir'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
+usort($entries, static function (array $a, array $b) use ($sort): int {
+    return strcmp((string)($a[$sort] ?? ''), (string)($b[$sort] ?? ''));
+});
+if ($sort_dir === 'desc') {
+    $entries = array_reverse($entries);
+}
 
-    // Wpis do edycji
-    if (isset($_GET['edit'])) {
-        $edit_code = trim($_GET['edit']);
-        if (preg_match('/^[0-9]{4}-[A-Z]{2}$/', $edit_code) && isset($all_data[$edit_code])) {
-            $edit_entry = $all_data[$edit_code];
-        }
+// Wpis do edycji – dostępny tylko po zalogowaniu
+if ($is_logged_in && isset($_GET['edit'])) {
+    $edit_code = trim($_GET['edit']);
+    if (preg_match('/^[0-9]{4}-[A-Z]{2}$/', $edit_code) && isset($all_data[$edit_code])) {
+        $edit_entry = $all_data[$edit_code];
     }
 }
 
 // Statystyki (na podstawie nieprzefiltrowanych danych)
-$total_entries  = $is_logged_in ? count($all_data ?? []) : 0;
-$with_name      = $is_logged_in ? count(array_filter($all_data ?? [], static fn($e) => $e['full_name'] !== '')) : 0;
-$claimed        = $is_logged_in ? count(array_filter($all_data ?? [], static fn($e) => $e['status'] === 'claimed')) : 0;
+$total_entries  = count($all_data);
+$with_name      = count(array_filter($all_data, static fn($e) => $e['full_name'] !== ''));
+$claimed        = count(array_filter($all_data, static fn($e) => $e['status'] === 'claimed'));
 
 $csrf = $_SESSION['csrf_token'];
 
@@ -398,23 +396,8 @@ function status_label(string $status): string
 </head>
 <body>
 
-<?php if (!$is_logged_in): ?>
-<!-- ===================== EKRAN LOGOWANIA ===================== -->
-<div class="login-wrap">
-  <h1>Panel administracyjny</h1>
-  <?php if ($error_msg): ?>
-    <p class="msg error"><?= esc($error_msg) ?></p>
-  <?php endif; ?>
-  <form method="post" autocomplete="off">
-    <input type="hidden" name="action" value="login">
-    <label for="pw">Hasło</label>
-    <input type="password" id="pw" name="password" autofocus required>
-    <button type="submit">Zaloguj</button>
-  </form>
-</div>
-
-<?php else: ?>
-<!-- ===================== PANEL ADMINA ===================== -->
+<?php if ($is_logged_in): ?>
+<!-- ===================== NAGŁÓWEK ADMINA ===================== -->
 <div class="admin-header">
   <h1>Urna &mdash; zgłoszenia uczestników</h1>
   <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
@@ -430,10 +413,27 @@ function status_label(string $status): string
     </form>
   </div>
 </div>
+<?php endif; ?>
 
 <div class="wrap">
 
-  <?php if ($error_msg): ?>
+  <?php if (!$is_logged_in): ?>
+  <!-- ===================== FORMULARZ LOGOWANIA ===================== -->
+  <div class="login-wrap" style="margin:1.5rem auto 2rem;">
+    <h1>Panel administracyjny</h1>
+    <?php if ($error_msg): ?>
+      <p class="msg error"><?= esc($error_msg) ?></p>
+    <?php endif; ?>
+    <form method="post" autocomplete="off">
+      <input type="hidden" name="action" value="login">
+      <label for="pw">Hasło</label>
+      <input type="password" id="pw" name="password" autofocus required>
+      <button type="submit">Zaloguj</button>
+    </form>
+  </div>
+  <?php endif; ?>
+
+  <?php if ($is_logged_in && $error_msg): ?>
     <p class="msg error"><?= esc($error_msg) ?></p>
   <?php endif; ?>
   <?php if ($success_msg): ?>
@@ -456,8 +456,8 @@ function status_label(string $status): string
     </div>
   </div>
 
-  <!-- Formularz edycji (gdy ?edit=CODE) -->
-  <?php if ($edit_entry): ?>
+  <!-- Formularz edycji (gdy ?edit=CODE) – tylko po zalogowaniu -->
+  <?php if ($is_logged_in && $edit_entry): ?>
   <div class="edit-section">
     <h2>Edytuj wpis: <?= esc($edit_entry['final_code']) ?></h2>
     <form method="post">
@@ -524,12 +524,12 @@ function status_label(string $status): string
           <th><a href="<?= esc(sort_url('status',     $sort, $sort_dir, $filter, $hide_empty)) ?>">Status<?= sort_indicator('status', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('created_at', $sort, $sort_dir, $filter, $hide_empty)) ?>">Zgłoszono<?= sort_indicator('created_at', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('updated_at', $sort, $sort_dir, $filter, $hide_empty)) ?>">Zaktualizowano<?= sort_indicator('updated_at', $sort, $sort_dir) ?></a></th>
-          <th>Akcje</th>
+          <?php if ($is_logged_in): ?><th>Akcje</th><?php endif; ?>
         </tr>
       </thead>
       <tbody>
         <?php if (empty($entries)): ?>
-          <tr><td colspan="7" class="empty">Brak wpisów<?= ($filter || $hide_empty) ? ' pasujących do filtra' : '' ?>.</td></tr>
+          <tr><td colspan="<?= $is_logged_in ? 7 : 6 ?>" class="empty">Brak wpisów<?= ($filter || $hide_empty) ? ' pasujących do filtra' : '' ?>.</td></tr>
         <?php else: ?>
           <?php foreach ($entries as $i => $e): ?>
           <tr>
@@ -541,6 +541,7 @@ function status_label(string $status): string
             <td data-label="Status"><?= status_label($e['status']) ?></td>
             <td class="date-cell" data-label="Zgłoszono"><?= esc($e['created_at']) ?></td>
             <td class="date-cell" data-label="Zaktualizowano"><?= esc($e['updated_at']) ?></td>
+            <?php if ($is_logged_in): ?>
             <td class="actions-cell" data-label="Akcje">
               <a href="?edit=<?= urlencode($e['final_code']) ?><?= $filter ? '&q=' . urlencode($filter) : '' ?><?= $hide_empty ? '&hide_empty=1' : '' ?>"
                  class="btn-edit-link">Edytuj</a>
@@ -552,6 +553,7 @@ function status_label(string $status): string
                 <button type="submit" class="btn-delete">Usuń</button>
               </form>
             </td>
+            <?php endif; ?>
           </tr>
           <?php endforeach; ?>
         <?php endif; ?>
@@ -560,7 +562,6 @@ function status_label(string $status): string
   </div>
 
 </div><!-- .wrap -->
-<?php endif; ?>
 
 </body>
 </html>
