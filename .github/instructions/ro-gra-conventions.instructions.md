@@ -42,6 +42,37 @@ Update `README.md` (in Polish) whenever you change:
 - Game rules or `GAME_START` date/time
 - Project structure or deployment instructions
 
+## JS Constants Before Deployment (`app.js`)
+
+Before every deployment, verify and update:
+
+| Constant | What to set |
+|----------|-------------|
+| `GAME_START` | Event start date-time in ISO 8601 with timezone offset, e.g. `'2026-05-24T13:00:00+02:00'` |
+| `API_BASE_URL` | Full URL of the PHP backend without trailing slash, e.g. `'https://example.com/rogra'`. Leave as empty string `''` to disable API integration. |
+
+## PHP Backend (`backend-php/`)
+
+The backend runs on a separate PHP server (not GitHub Pages). Before deploying the backend, update `backend-php/config/config.php`:
+
+| Constant | What to set |
+|----------|-------------|
+| `ADMIN_PASSWORD_HASH` | Generate bcrypt hash: `php -r "echo password_hash('YOUR_PASSWORD', PASSWORD_BCRYPT);"` |
+| `ALLOWED_ORIGIN` | Exact GitHub Pages URL without trailing slash, e.g. `https://your-login.github.io` |
+
+Deploy **only the contents of `backend-php/`** to the PHP server, not the full repository.
+
+When `ALLOWED_ORIGIN` changes (e.g. repository renamed), update `config.php` and `API_BASE_URL` together.
+
+## Hidden URL Parameters (Testing)
+
+| Parameter | Effect |
+|-----------|--------|
+| `?admin=reset` | Clears progress (discoveries + final code), resets to 0/7 |
+| `?admin=reveal-all` | Reveals all cards and generates a new final code |
+
+`admin` takes priority over `q` when both are present. The parameter is removed from the address bar after the action executes.
+
 ## CSS Cache-Busting
 
 Whenever you edit `style.css`, update the `?v=` query string in `index.html`:

@@ -80,6 +80,12 @@ const LS_FINAL_CODE = 'rogra_final_code';  // klucz w localStorage
 // Alfabet liter do kodu finałowego
 const FINAL_LETTER_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 
+// Adres backendu PHP. Ustaw przed wdrożeniem. Zostaw pusty żeby wyłączyć API.
+const API_BASE_URL = '';
+
+// Klucz localStorage – czy kod finałowy został już wysłany do API
+const LS_API_SUBMITTED = 'rogra_api_submitted';
+
 /** Zwraca true gdy gra już wystartowała. */
 function isGameStarted() {
   return Date.now() >= GAME_START;
@@ -216,6 +222,49 @@ function closeFinalScreen() {
 function showFinalBanner(code) {
   document.getElementById('final-banner-code').textContent = code;
   document.getElementById('final-banner').classList.remove('hidden');
+}
+
+/* =============================================
+   API – INTEGRACJA Z BACKENDEM PHP
+   ============================================= */
+
+/**
+ * Wysyła kod finałowy do backendu PHP.
+ * Fire-and-forget: błędy są ciche, gra działa niezależnie od API.
+ */
+async function submitFinalCode(code) {
+  if (!API_BASE_URL) return;
+  if (localStorage.getItem(LS_API_SUBMITTED) === code) return;
+  try {
+    const resp = await fetch(API_BASE_URL + '/api/submit.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ final_code: code, source: 'gh-pages' }),
+    });
+    if (resp.ok) {
+      localStorage.setItem(LS_API_SUBMITTED, code);
+    }
+  } catch (_) {
+    // Brak połączenia – nie blokuje gry
+  }
+}
+
+/**
+ * Aktualizuje imię i nazwisko uczestnika w backendzie PHP.
+ * Zwraca obiekt z odpowiedzią API lub { ok: false, error: '...' }.
+ */
+async function updateParticipantName(code, name) {
+  if (!API_BASE_URL) return { ok: false, error: 'api_disabled' };
+  try {
+    const resp = await fetch(API_BASE_URL + '/api/update-name.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ final_code: code, full_name: name }),
+    });
+    return await resp.json();
+  } catch (_) {
+    return { ok: false, error: 'network_error' };
+  }
 }
 
 /* =============================================
@@ -400,6 +449,7 @@ function init() {
       saveFinalCode(code);
     }
     showFinalBanner(code);
+    submitFinalCode(code);
     // Pokaż ekran końcowy z krótkim opóźnieniem (żeby modal karty zdążył się zamknąć)
     const delay = (adminAction === 'reveal-all' || status === 'ok') ? 1800 : 400;
     setTimeout(() => showFinalScreen(code), delay);
@@ -424,6 +474,12 @@ function init() {
     mapImg.src = preStartSrc;
     document.getElementById('map-modal-img').src = preStartSrc;
     startCountdown();
+  }
+
+  // Ukryj sekcję zgłoszeń gdy API nie jest skonfigurowane
+  if (!API_BASE_URL) {
+    const nameSec = document.getElementById('final-name-section');
+    if (nameSec) nameSec.style.display = 'none';
   }
 
   // 7. Zoom mapy
@@ -474,6 +530,7 @@ function handleManualToken(rawToken) {
       saveFinalCode(code);
     }
     showFinalBanner(code);
+    submitFinalCode(code);
     setTimeout(() => showFinalScreen(code), 1800);
   }
 }
@@ -488,6 +545,49 @@ document.getElementById('card-modal').addEventListener('click', e => {
 });
 
 document.getElementById('final-close').addEventListener('click', closeFinalScreen);
+
+document.getElementById('final-name-submit').addEventListener('click', async () => {
+  const input    = document.getElementById('final-name-input');
+  const statusEl = document.getElementById('final-name-status');
+  const btn      = document.getElementById('final-name-submit');
+  const name     = input.value.trim();
+
+  if (!name) {
+    statusEl.textContent = 'Wpisz imię i nazwisko.';
+    statusEl.className   = 'final-name-status error';
+    return;
+  }
+
+  const code = getFinalCode();
+  if (!code) return;
+
+  btn.disabled         = true;
+  statusEl.textContent = 'Zapisywanie...';
+  statusEl.className   = 'final-name-status loading';
+
+  let result = await updateParticipantName(code, name);
+
+  // Jeśli kod nie trafił jeszcze do serwera – wyślij go i ponów
+  if (!result.ok && result.error === 'final_code_not_found') {
+    localStorage.removeItem(LS_API_SUBMITTED);
+    await submitFinalCode(code);
+    result = await updateParticipantName(code, name);
+  }
+
+  if (result.ok) {
+    statusEl.textContent = 'Zapisano! Do zobaczenia przy stoisku.';
+    statusEl.className   = 'final-name-status success';
+    input.disabled       = true;
+  } else if (result.error === 'api_disabled') {
+    statusEl.textContent = 'Funkcja zgłoszeń jest wyłączona.';
+    statusEl.className   = 'final-name-status error';
+    btn.disabled         = false;
+  } else {
+    statusEl.textContent = 'Błąd zapisu. Spróbuj ponownie.';
+    statusEl.className   = 'final-name-status error';
+    btn.disabled         = false;
+  }
+});
 
 document.getElementById('manual-code-submit').addEventListener('click', () => {
   const input = document.getElementById('manual-code-input');

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Co piszczy w trawie w naszym parku</title>
-  <link rel="stylesheet" href="style.css?v=202605231802" />
+  <link rel="stylesheet" href="style.css?v=202605232200" />
 </head>
 <body>
 
@@ -136,6 +136,22 @@
       <div class="final-info">
         <p>Po zebraniu wszystkich kart <strong>zgłoś się do stoiska Rady Osiedla</strong>, aby odebrać upominek.</p>
         <p>Losowanie głównej nagrody odbędzie się na scenie między <strong>16:00 a 16:30</strong>.</p>
+      </div>
+      <!-- Zapis imienia i nazwiska do urny -->
+      <div id="final-name-section" class="final-name-section">
+        <p class="final-name-label">Chcesz wziąć udział w losowaniu nagród?<br>Wpisz imię i nazwisko:</p>
+        <div class="final-name-row">
+          <input
+            id="final-name-input"
+            type="text"
+            class="final-name-input"
+            maxlength="120"
+            placeholder="Np. Jan Kowalski"
+            autocomplete="name"
+          />
+          <button id="final-name-submit" class="final-name-btn">Zapisz</button>
+        </div>
+        <div id="final-name-status" class="final-name-status"></div>
       </div>
       <button id="final-close">Wróć do mapy</button>
     </div>

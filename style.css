@@ -668,6 +668,77 @@ header h1 {
   opacity: 0.85;
 }
 
+/* ---- Formularz imienia i nazwiska w ekranie końcowym ---- */
+.final-name-section {
+  background: var(--green-pale);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 0.8rem 0 0.2rem;
+  text-align: left;
+}
+
+.final-name-label {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  margin-bottom: 0.55rem;
+  display: block;
+  line-height: 1.45;
+}
+
+.final-name-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.final-name-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.48rem 0.75rem;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: var(--font);
+  color: var(--text-dark);
+  background: #fff;
+}
+
+.final-name-input:focus {
+  outline: 2px solid var(--green-mid);
+  outline-offset: 1px;
+}
+
+.final-name-btn {
+  padding: 0.48rem 1.1rem;
+  background: var(--green-mid);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: var(--font);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.final-name-btn:active {
+  opacity: 0.85;
+}
+
+.final-name-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.final-name-status {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  min-height: 1.15em;
+}
+
+.final-name-status.loading { color: var(--text-mid); }
+.final-name-status.success { color: var(--green-dark); font-weight: 600; }
+.final-name-status.error   { color: #c0392b; }
+
 /* =============================================
    FINAL CODE BANNER (top of page)
    ============================================= */

@@ -13,16 +13,25 @@ Prosta aplikacja webowa do gry terenowej na festyn. Użytkownicy skanują kody Q
 ## Struktura projektu
 
 ```
-index.html     – strona główna aplikacji
-style.css      – style (mobile-first)
-app.js         – logika: karty, localStorage, kody QR, kod finałowy
-img/           – zdjęcia (podmień przed wdrożeniem)
-  mapa.jpg     – mapa parku (opcjonalna)
-  card-1.jpg   – zdjęcie karty 1 (opcjonalne)
-  card-2.jpg   – zdjęcie karty 2 (opcjonalne)
-  ...
-  card-7.jpg   – zdjęcie karty 7 (opcjonalne)
+index.html          – strona główna aplikacji
+style.css           – style (mobile-first)
+app.js              – logika: karty, localStorage, kody QR, kod finałowy, integracja API
+img/                – zdjęcia (podmień przed wdrożeniem)
+  mapa.jpg          – mapa parku (opcjonalna)
+  card-1.jpg … card-7.jpg
 README.md
+backend-php/        – backend urny (wdrażany oddzielnie przez FTP, nie na GitHub Pages)
+  config/
+    config.php      – konfiguracja: hasło admina (hash), origin GH Pages, ścieżka do JSON
+  api/
+    _helpers.php    – funkcje pomocnicze: CORS, JSON read/write, odpowiedzi
+    submit.php      – POST: rejestracja kodu finałowego
+    update-name.php – POST: zapis imienia i nazwiska uczestnika
+  admin/
+    index.php       – ukryty panel administracyjny (logowanie, lista, edycja, usuwanie)
+  storage/
+    .htaccess       – blokada bezpośredniego dostępu HTTP do katalogu
+    entries.json    – dane uczestników (tworzony automatycznie przy pierwszym zapisie)
 ```
 
 ---
@@ -98,7 +107,7 @@ Aby podmienić mapę, umieść plik `img/mapa.jpg` w repozytorium.
 
 ---
 
-## Tajne akcje dla organizatora / testów
+## Tajne akcje dla organizatora
 
 Aplikacja obsługuje dwa ukryte parametry URL przeznaczone dla organizatora lub do testowania. Parametr `admin` ma priorytet nad parametrem `q` – jeśli oba są obecne w URL, akcja administracyjna wygrywa.
 
@@ -119,6 +128,98 @@ https://<adres-aplikacji>/?admin=reveal-all
 ```
 
 W obu przypadkach parametr `admin` jest automatycznie usuwany z paska adresu po wykonaniu akcji.
+
+---
+
+## Backend urny – rejestracja uczestników
+
+Katalog `backend-php/` zawiera osobny backend PHP do zbierania zgłoszeń. Działa na innym hostingu niż GitHub Pages i komunikuje się z frontendem przez HTTPS API. Frontend wysyła kod finałowy automatycznie po zebraniu wszystkich 7 kart, a uczestnik może opcjonalnie wpisać imię i nazwisko w ekranie końcowym.
+
+### Wymagania hostingu PHP
+
+- PHP 8.0 lub nowszy
+- Możliwość zapisu pliku w katalogu `storage/` (uprawnienia np. 755 lub 775)
+- HTTPS (wymagane przez przeglądarkę przy wywołaniach z GitHub Pages)
+
+### Krok 1 – Wgraj pliki PHP na serwer przez FTP
+
+Wgraj **wyłącznie zawartość katalogu `backend-php/`** na serwer PHP. Nie wgrywaj całego repo.
+
+Przykładowa struktura na serwerze:
+```
+public_html/              (lub inny webroot)
+  config/
+    config.php
+  api/
+    _helpers.php
+    submit.php
+    update-name.php
+  admin/
+    index.php
+  storage/
+    .htaccess
+```
+
+### Krok 2 – Ustaw hasło administratora
+
+Wygeneruj hash hasła poleceniem:
+
+```bash
+php -r "echo password_hash('TWOJE_HASLO', PASSWORD_BCRYPT);"
+```
+
+Wklej wynik do pliku `config/config.php` jako wartość stałej `ADMIN_PASSWORD_HASH`.
+
+### Krok 3 – Ustaw origin GitHub Pages
+
+W pliku `config/config.php` zmień wartość `ALLOWED_ORIGIN` na dokładny adres swojej aplikacji na GitHub Pages, np.:
+
+```php
+define('ALLOWED_ORIGIN', 'https://twoj-login.github.io');
+```
+
+Bez końcowego slasha. Bez tej zmiany przeglądarka zablokuje zapytania CORS z frontendu.
+
+### Krok 4 – Ustaw adres API w frontendzie
+
+W pliku `app.js` znajdź stałą `API_BASE_URL` i wpisz adres serwera PHP (bez końcowego slasha):
+
+```js
+const API_BASE_URL = 'https://twoj-serwer.pl';
+```
+
+Potem zrób `git push` – frontend na GitHub Pages zacznie wysyłać zgłoszenia do API.
+
+### Panel administracyjny
+
+Panel jest dostępny bezpośrednio pod adresem serwera PHP, np.:
+
+```
+https://twoj-serwer.pl/admin/
+```
+
+Nie jest linkowany ani opisany publicznie. Możesz w nim przeglądać, edytować i usuwać zgłoszenia. Status wpisu: **Nowe** / **Odebrane** / **Nieprawidłowe**.
+
+### Dane uczestników
+
+Wszystkie zgłoszenia są zapisywane w pliku `storage/entries.json`. Każdy wpis zawiera:
+
+| Pole         | Opis                                      |
+|--------------|-------------------------------------------|
+| `final_code` | Kod finałowy (klucz główny, np. `1234-AB`) |
+| `full_name`  | Imię i nazwisko (opcjonalne)              |
+| `status`     | `new` / `claimed` / `invalid`             |
+| `created_at` | Data pierwszego zgłoszenia (ISO 8601)     |
+| `updated_at` | Data ostatniej aktualizacji               |
+
+### Wdrożenie – podsumowanie
+
+| Cel               | Jak                                    |
+|-------------------|----------------------------------------|
+| Frontend          | `git push` → GitHub Pages automatycznie |
+| Backend PHP       | FTP – tylko katalog `backend-php/`     |
+| Konfiguracja API  | Zmień `API_BASE_URL` w `app.js`        |
+| Hasło admina      | `ADMIN_PASSWORD_HASH` w `config.php`   |
 
 ---
 
