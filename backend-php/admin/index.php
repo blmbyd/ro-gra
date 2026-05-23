@@ -144,13 +144,17 @@ if ($is_logged_in) {
     $entries  = array_values($all_data);
 
     // Filtrowanie
-    $filter = trim(strip_tags($_GET['q'] ?? ''));
+    $filter     = trim(strip_tags($_GET['q'] ?? ''));
+    $hide_empty = isset($_GET['hide_empty']);
     if ($filter !== '') {
         $fl = mb_strtolower($filter);
         $entries = array_values(array_filter($entries, static function (array $e) use ($fl): bool {
             return strpos(mb_strtolower($e['final_code']), $fl) !== false
                 || strpos(mb_strtolower($e['full_name']),  $fl) !== false;
         }));
+    }
+    if ($hide_empty) {
+        $entries = array_values(array_filter($entries, static fn(array $e): bool => $e['full_name'] !== ''));
     }
 
     // Sortowanie
@@ -187,12 +191,15 @@ function esc(string $s): string
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
-function sort_url(string $col, string $current_sort, string $current_dir, string $filter): string
+function sort_url(string $col, string $current_sort, string $current_dir, string $filter, bool $hide_empty = false): string
 {
     $dir = ($col === $current_sort && $current_dir === 'asc') ? 'desc' : 'asc';
     $params = ['sort' => $col, 'dir' => $dir];
     if ($filter !== '') {
         $params['q'] = $filter;
+    }
+    if ($hide_empty) {
+        $params['hide_empty'] = '1';
     }
     return '?' . http_build_query($params);
 }
@@ -268,6 +275,10 @@ function status_label(string $status): string
     .filter-row { display: flex; gap: 0.5rem; margin: 1rem 0; align-items: center; flex-wrap: wrap; }
     .filter-row input[type=text] { padding: 0.45rem 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; width: 220px; }
     .btn-filter { padding: 0.45rem 1rem; background: #40916c; color: #fff; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; }
+    .btn-toggle { padding: 0.45rem 0.9rem; background: #fff; color: #444; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-toggle:hover { background: #f4f6f8; text-decoration: none; }
+    .btn-toggle-active { background: #fff3cd; color: #856404; border-color: #ffc107; }
+    .btn-toggle-active:hover { background: #ffe69c; }
     .filter-info { font-size: 0.85rem; color: #666; }
 
     /* Tabela */
@@ -468,9 +479,21 @@ function status_label(string $status): string
     <input type="text" name="q" value="<?= esc($filter) ?>" placeholder="Szukaj kodu lub nazwiska...">
     <?php if ($sort !== 'created_at'): ?><input type="hidden" name="sort" value="<?= esc($sort) ?>"><?php endif; ?>
     <?php if ($sort_dir !== 'desc'):  ?><input type="hidden" name="dir"  value="<?= esc($sort_dir) ?>"><?php endif; ?>
+    <?php if ($hide_empty): ?><input type="hidden" name="hide_empty" value="1"><?php endif; ?>
     <button type="submit" class="btn-filter">Filtruj</button>
+    <?php
+      $toggle_params = [];
+      if ($filter !== '')         $toggle_params['q']          = $filter;
+      if ($sort !== 'created_at') $toggle_params['sort']       = $sort;
+      if ($sort_dir !== 'desc')   $toggle_params['dir']        = $sort_dir;
+      if (!$hide_empty)           $toggle_params['hide_empty'] = '1';
+      $toggle_url = '?' . http_build_query($toggle_params);
+    ?>
+    <a href="<?= esc($toggle_url) ?>" class="btn-toggle<?= $hide_empty ? ' btn-toggle-active' : '' ?>">
+      <?= $hide_empty ? 'Pokaż wszystkich' : 'Ukryj bez danych' ?>
+    </a>
     <?php if ($filter): ?>
-      <a href="<?= esc($_SERVER['PHP_SELF']) ?>">Wyczyść filtr</a>
+      <a href="<?= esc($_SERVER['PHP_SELF'] . ($hide_empty ? '?hide_empty=1' : '')) ?>">Wyczyść filtr</a>
     <?php endif; ?>
     <span class="filter-info">Znaleziono: <?= count($entries) ?> / <?= $total_entries ?></span>
   </form>
@@ -481,17 +504,17 @@ function status_label(string $status): string
       <thead>
         <tr>
           <th style="width:2.5rem;text-align:center">#</th>
-          <th><a href="<?= esc(sort_url('final_code', $sort, $sort_dir, $filter)) ?>">Kod finałowy<?= sort_indicator('final_code', $sort, $sort_dir) ?></a></th>
-          <th><a href="<?= esc(sort_url('full_name',  $sort, $sort_dir, $filter)) ?>">Imię i nazwisko<?= sort_indicator('full_name', $sort, $sort_dir) ?></a></th>
-          <th><a href="<?= esc(sort_url('status',     $sort, $sort_dir, $filter)) ?>">Status<?= sort_indicator('status', $sort, $sort_dir) ?></a></th>
-          <th><a href="<?= esc(sort_url('created_at', $sort, $sort_dir, $filter)) ?>">Zgłoszono<?= sort_indicator('created_at', $sort, $sort_dir) ?></a></th>
-          <th><a href="<?= esc(sort_url('updated_at', $sort, $sort_dir, $filter)) ?>">Zaktualizowano<?= sort_indicator('updated_at', $sort, $sort_dir) ?></a></th>
+          <th><a href="<?= esc(sort_url('final_code', $sort, $sort_dir, $filter, $hide_empty)) ?>">Kod finałowy<?= sort_indicator('final_code', $sort, $sort_dir) ?></a></th>
+          <th><a href="<?= esc(sort_url('full_name',  $sort, $sort_dir, $filter, $hide_empty)) ?>">Imię i nazwisko<?= sort_indicator('full_name', $sort, $sort_dir) ?></a></th>
+          <th><a href="<?= esc(sort_url('status',     $sort, $sort_dir, $filter, $hide_empty)) ?>">Status<?= sort_indicator('status', $sort, $sort_dir) ?></a></th>
+          <th><a href="<?= esc(sort_url('created_at', $sort, $sort_dir, $filter, $hide_empty)) ?>">Zgłoszono<?= sort_indicator('created_at', $sort, $sort_dir) ?></a></th>
+          <th><a href="<?= esc(sort_url('updated_at', $sort, $sort_dir, $filter, $hide_empty)) ?>">Zaktualizowano<?= sort_indicator('updated_at', $sort, $sort_dir) ?></a></th>
           <th>Akcje</th>
         </tr>
       </thead>
       <tbody>
         <?php if (empty($entries)): ?>
-          <tr><td colspan="7" class="empty">Brak wpisów<?= $filter ? ' pasujących do filtra' : '' ?>.</td></tr>
+          <tr><td colspan="7" class="empty">Brak wpisów<?= ($filter || $hide_empty) ? ' pasujących do filtra' : '' ?>.</td></tr>
         <?php else: ?>
           <?php foreach ($entries as $i => $e): ?>
           <tr>
@@ -504,7 +527,7 @@ function status_label(string $status): string
             <td class="date-cell" data-label="Zgłoszono"><?= esc($e['created_at']) ?></td>
             <td class="date-cell" data-label="Zaktualizowano"><?= esc($e['updated_at']) ?></td>
             <td class="actions-cell" data-label="Akcje">
-              <a href="?edit=<?= urlencode($e['final_code']) ?><?= $filter ? '&q=' . urlencode($filter) : '' ?>"
+              <a href="?edit=<?= urlencode($e['final_code']) ?><?= $filter ? '&q=' . urlencode($filter) : '' ?><?= $hide_empty ? '&hide_empty=1' : '' ?>"
                  class="btn-edit-link">Edytuj</a>
               <form method="post" style="display:inline"
                     onsubmit="return confirm('Usunąć wpis <?= esc(addslashes($e['final_code'])) ?>?')">
