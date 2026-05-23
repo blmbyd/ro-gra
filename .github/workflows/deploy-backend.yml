@@ -23,9 +23,9 @@ jobs:
           username:   ${{ vars.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
           local-dir:  ./backend-php/
-          server-dir: /
-          protocol:   ftps
+          protocol:   ftps-legacy
           port:       21
+          security:   loose
           log-level:  verbose
           # Nie nadpisuj danych uczestników zebranych na produkcji
           exclude: |
