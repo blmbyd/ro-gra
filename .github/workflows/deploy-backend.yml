@@ -26,6 +26,7 @@ jobs:
           server-dir: /
           protocol:   ftps
           port:       21
+          security:   loose
           # Nie nadpisuj danych uczestników zebranych na produkcji
           exclude: |
             **/.git*
