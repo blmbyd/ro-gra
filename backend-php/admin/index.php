@@ -115,6 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 $error_msg = 'Nie udało się zapisać zmian.';
+
+            } elseif ($action === 'delete_all') {
+                write_json([]);
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?msg=' . urlencode('Wszystkie wpisy zostały usunięte.'));
+                exit;
             }
         }
     }
@@ -249,6 +254,8 @@ function status_label(string $status): string
     .admin-header h1 { font-size: 1.1rem; }
     .btn-sm { padding: 0.35rem 0.85rem; background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
     .btn-sm:hover { background: rgba(255,255,255,0.25); }
+    .btn-sm-danger { background: rgba(220,53,69,0.75); border-color: rgba(220,53,69,0.5); }
+    .btn-sm-danger:hover { background: rgba(220,53,69,1); }
 
     /* Komunikaty */
     .msg { padding: 0.6rem 1rem; border-radius: 7px; margin: 1rem 0; font-size: 0.9rem; }
@@ -410,10 +417,18 @@ function status_label(string $status): string
 <!-- ===================== PANEL ADMINA ===================== -->
 <div class="admin-header">
   <h1>Urna &mdash; zgłoszenia uczestników</h1>
-  <form method="post">
-    <input type="hidden" name="action" value="logout">
-    <button type="submit" class="btn-sm">Wyloguj</button>
-  </form>
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
+    <form method="post"
+          onsubmit="return confirm('Usun\u0105\u0107 wszystkie wpisy? Operacja jest nieodwracalna.')">
+      <input type="hidden" name="action"     value="delete_all">
+      <input type="hidden" name="csrf_token" value="<?= esc($csrf) ?>">
+      <button type="submit" class="btn-sm btn-sm-danger">Usu&#324; wszystkie</button>
+    </form>
+    <form method="post">
+      <input type="hidden" name="action" value="logout">
+      <button type="submit" class="btn-sm">Wyloguj</button>
+    </form>
+  </div>
 </div>
 
 <div class="wrap">
