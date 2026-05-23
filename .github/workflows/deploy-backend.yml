@@ -19,8 +19,8 @@ jobs:
       - name: Wgraj na serwer przez FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
-          server:     ${{ secrets.FTP_SERVER }}
-          username:   ${{ secrets.FTP_USERNAME }}
+          server:     ${{ variables.FTP_SERVER }}
+          username:   ${{ variables.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
           local-dir:  ./backend-php/
           server-dir: /
