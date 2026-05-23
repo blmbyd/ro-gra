@@ -69,7 +69,7 @@ When `ALLOWED_ORIGIN` changes (e.g. repository renamed), update `config.php` and
 | Parameter | Effect |
 |-----------|--------|
 | `?admin=reset` | Clears progress (discoveries + final code), resets to 0/7 |
-| `?admin=reveal-all` | Reveals all cards and generates a new final code |
+| `?admin=pokaz` | Reveals all cards and generates a new final code |
 
 `admin` takes priority over `q` when both are present. The parameter is removed from the address bar after the action executes.
 

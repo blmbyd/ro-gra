@@ -371,10 +371,10 @@ function handleQrParam() {
 
 /* =============================================
    OBSŁUGA TAJNEGO PARAMETRU ?admin=AKCJA
-   Zwraca: 'reset' | 'reveal-all' | 'none'
+   Zwraca: 'reset' | 'pokaz' | 'none'
    Akcje:
-     reset      – czyści postęp i kod finałowy
-     reveal-all – odkrywa wszystkie karty, generuje nowy kod
+     reset – czyści postęp i kod finałowy
+     pokaz – odkrywa wszystkie karty, generuje nowy kod
    ============================================= */
 function handleAdminParam() {
   const params = new URLSearchParams(window.location.search);
@@ -392,10 +392,10 @@ function handleAdminParam() {
     return 'reset';
   }
 
-  if (action === 'reveal-all') {
+  if (action === 'pokaz') {
     saveDiscovered(CARDS.map(c => c.id), true);
     saveFinalCode(generateFinalCode(), true);
-    return 'reveal-all';
+    return 'pokaz';
   }
 
   return 'none';
@@ -411,14 +411,14 @@ function init() {
   // 2. Obsłuż parametr QR (pomijany gdy wykonano akcję administracyjną)
   const { status, card } = adminAction === 'none' ? handleQrParam() : { status: 'none', card: null };
 
-  // 3. Przed startem gry wyczyść localStorage (chyba że właśnie wykonano reveal-all)
-  if (!isGameStarted() && adminAction !== 'reveal-all') {
+  // 3. Przed startem gry wyczyść localStorage (chyba że właśnie wykonano pokaz)
+  if (!isGameStarted() && adminAction !== 'pokaz') {
     localStorage.removeItem(LS_DISCOVERED);
     localStorage.removeItem(LS_FINAL_CODE);
   }
 
   // 4. Odczytaj stan
-  const discovered = (isGameStarted() || adminAction === 'reveal-all') ? getDiscovered() : [];
+  const discovered = (isGameStarted() || adminAction === 'pokaz') ? getDiscovered() : [];
   const count = discovered.length;
 
   // 5. Renderuj UI
@@ -428,7 +428,7 @@ function init() {
   // 6. Pokaż komunikat zależny od wykonanej akcji
   if (adminAction === 'reset') {
     showToast('Postęp zresetowany.', 'info', 3500);
-  } else if (adminAction === 'reveal-all') {
+  } else if (adminAction === 'pokaz') {
     showToast('Wszystkie karty odsłonięte.', 'success', 3500);
   } else if (status === 'ok') {
     showToast(`✅ Odkryto nową kartę: ${card.title}!`, 'success', 4000);
@@ -451,7 +451,7 @@ function init() {
     showFinalBanner(code);
     submitFinalCode(code);
     // Pokaż ekran końcowy z krótkim opóźnieniem (żeby modal karty zdążył się zamknąć)
-    const delay = (adminAction === 'reveal-all' || status === 'ok') ? 1800 : 400;
+    const delay = (adminAction === 'pokaz' || status === 'ok') ? 1800 : 400;
     setTimeout(() => showFinalScreen(code), delay);
   }
 

@@ -124,7 +124,7 @@ https://<adres-aplikacji>/?admin=reset
 Odkrywa wszystkie 7 kart i zawsze generuje nowy kod finałowy. Przydatne do demonstracji przed festynem.
 
 ```
-https://<adres-aplikacji>/?admin=reveal-all
+https://<adres-aplikacji>/?admin=pokaz
 ```
 
 W obu przypadkach parametr `admin` jest automatycznie usuwany z paska adresu po wykonaniu akcji.
