@@ -480,6 +480,7 @@ function status_label(string $status): string
     <table>
       <thead>
         <tr>
+          <th style="width:2.5rem;text-align:center">#</th>
           <th><a href="<?= esc(sort_url('final_code', $sort, $sort_dir, $filter)) ?>">Kod finałowy<?= sort_indicator('final_code', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('full_name',  $sort, $sort_dir, $filter)) ?>">Imię i nazwisko<?= sort_indicator('full_name', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('status',     $sort, $sort_dir, $filter)) ?>">Status<?= sort_indicator('status', $sort, $sort_dir) ?></a></th>
@@ -490,10 +491,11 @@ function status_label(string $status): string
       </thead>
       <tbody>
         <?php if (empty($entries)): ?>
-          <tr><td colspan="6" class="empty">Brak wpisów<?= $filter ? ' pasujących do filtra' : '' ?>.</td></tr>
+          <tr><td colspan="7" class="empty">Brak wpisów<?= $filter ? ' pasujących do filtra' : '' ?>.</td></tr>
         <?php else: ?>
-          <?php foreach ($entries as $e): ?>
+          <?php foreach ($entries as $i => $e): ?>
           <tr>
+            <td style="text-align:center;color:#888;font-size:0.8rem" data-label="#"><?= $i + 1 ?></td>
             <td class="code-cell" data-label="Kod"><?= esc($e['final_code']) ?></td>
             <td class="name-cell" data-label="Nazwisko" title="<?= esc($e['full_name']) ?>">
               <?= $e['full_name'] !== '' ? esc($e['full_name']) : '<span style="color:#aaa">—</span>' ?>
