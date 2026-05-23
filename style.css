@@ -141,6 +141,81 @@ header h1 {
 }
 
 /* =============================================
+   RULES (jak grac)
+   ============================================= */
+#rules-section {
+  max-width: 480px;
+  margin: 0 auto 1rem;
+  padding: 0 1rem;
+}
+
+.rules-details {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.rules-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  cursor: pointer;
+  list-style: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.rules-summary::-webkit-details-marker {
+  display: none;
+}
+
+.rules-summary::after {
+  content: '\25B8';
+  font-size: 0.85rem;
+  color: var(--green-mid);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.rules-details[open] .rules-summary::after {
+  transform: rotate(90deg);
+}
+
+.rules-body {
+  padding: 0 1rem 0.85rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.rules-goal {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: #f0f7f1;
+  border-left: 3px solid var(--green-mid);
+  border-radius: 4px;
+  padding: 0.45rem 0.7rem;
+  margin: 0.65rem 0 0.55rem;
+  line-height: 1.4;
+}
+
+.rules-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  line-height: 1.65;
+}
+
+.rules-list li {
+  margin-bottom: 0.15rem;
+}
+
+/* =============================================
    PROGRESS
    ============================================= */
 #browser-hint-section {
