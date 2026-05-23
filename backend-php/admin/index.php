@@ -298,6 +298,48 @@ function status_label(string $status): string
     .btn-edit-link:hover { background: #d8f3dc; text-decoration: none; }
 
     .empty { text-align: center; padding: 2rem; color: #888; }
+
+    /* =============================================
+       RESPONSYWNOSC – MEDIA QUERIES
+       ============================================= */
+
+    /* <= 768 px: tabela – mniejsze odstepy, ukrycie kolumny Zaktualizowano */
+    @media (max-width: 768px) {
+      th, td { padding: 0.5rem 0.6rem; font-size: 0.8rem; }
+      th:nth-child(5), td:nth-child(5) { display: none; }
+      .name-cell { max-width: 150px; }
+      .actions-cell { white-space: normal; }
+    }
+
+    /* <= 680 px: formularz edycji – uklad pionowy */
+    @media (max-width: 680px) {
+      .edit-section { padding: 1rem; }
+      .edit-row { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+      .edit-row label { min-width: auto; }
+      .edit-row input[type=text] { width: 100% !important; }
+      .edit-row select { width: 100%; }
+      .btn-save, .btn-cancel { width: 100%; text-align: center; display: block; margin: 0; }
+      .btn-cancel { margin-top: 0.4rem; }
+    }
+
+    /* <= 640 px: naglowek – uklad pionowy */
+    @media (max-width: 640px) {
+      .admin-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.8rem 1rem; }
+      .admin-header h1 { font-size: 1rem; }
+      .btn-sm { align-self: flex-start; }
+    }
+
+    /* <= 480 px: statystyki i filtr – jednokolumnowy */
+    @media (max-width: 480px) {
+      .wrap { padding: 1rem 0.75rem; }
+      .stats { flex-direction: column; gap: 0.6rem; }
+      .stat { padding: 0.75rem 1rem; }
+      .filter-row { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+      .filter-row input[type=text] { width: 100%; }
+      .btn-filter { width: 100%; }
+      .filter-info { text-align: center; }
+      .login-wrap { margin: 2rem auto; }
+    }
   </style>
 </head>
 <body>
