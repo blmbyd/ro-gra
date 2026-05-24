@@ -46,19 +46,22 @@ $data = read_json();
 $now  = now();
 
 if (isset($data[$final_code])) {
-    // Kod już istnieje – odśwież updated_at i odpowiedz already_exists
-    $data[$final_code]['updated_at'] = $now;
+    // Kod już istnieje (zarejestrowany przez start.php) – oznacz jako ukończone
+    $data[$final_code]['updated_at']       = $now;
+    $data[$final_code]['status']           = 'completed';
+    $data[$final_code]['discovered_count'] = TOTAL_CARDS;
     write_json($data);
     json_response(['ok' => true, 'result' => 'already_exists', 'final_code' => $final_code]);
 }
 
-// Nowy wpis
+// Nowy wpis (fallback gdy start.php nie był wywołany)
 $data[$final_code] = [
-    'final_code'  => $final_code,
-    'full_name'   => '',
-    'created_at'  => $now,
-    'updated_at'  => $now,
-    'status'      => 'new',
+    'final_code'       => $final_code,
+    'full_name'        => '',
+    'created_at'       => $now,
+    'updated_at'       => $now,
+    'status'           => 'completed',
+    'discovered_count' => TOTAL_CARDS,
 ];
 
 if (!write_json($data)) {

@@ -84,3 +84,16 @@ function now(): string
 {
     return date('c');
 }
+
+/**
+ * Generuje losowy kod finałowy w formacie 4 cyfry + myślnik + 2 wielkie litery.
+ * Alfabet liter wyklucza I, O (podobne do cyfr).
+ */
+function generate_final_code(): string
+{
+    $alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $num = random_int(1111, 9999);
+    $l1  = $alphabet[random_int(0, strlen($alphabet) - 1)];
+    $l2  = $alphabet[random_int(0, strlen($alphabet) - 1)];
+    return sprintf('%d-%s%s', $num, $l1, $l2);
+}

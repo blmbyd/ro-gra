@@ -25,3 +25,6 @@ define('SESSION_NAME', 'rogra_admin');
 
 // Maksymalna długość pola imię i nazwisko (znaki).
 define('FULL_NAME_MAX_LEN', 120);
+
+// Łączna liczba kart w grze.
+define('TOTAL_CARDS', 7);

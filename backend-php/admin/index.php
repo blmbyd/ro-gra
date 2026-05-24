@@ -139,7 +139,7 @@ $entries      = [];
 $filter       = '';
 $sort         = 'created_at';
 $sort_dir     = 'desc';
-$allowed_sort = ['created_at', 'updated_at', 'full_name', 'final_code', 'status'];
+$allowed_sort = ['created_at', 'updated_at', 'full_name', 'final_code', 'status', 'discovered_count'];
 
 // Edytowany wpis (gdy ?edit=CODE w URL) – ładowany tylko po zalogowaniu
 $edit_entry = null;
@@ -183,6 +183,7 @@ if ($is_logged_in && isset($_GET['edit'])) {
 $total_entries  = count($all_data);
 $with_name      = count(array_filter($all_data, static fn($e) => $e['full_name'] !== ''));
 $claimed        = count(array_filter($all_data, static fn($e) => $e['status'] === 'claimed'));
+$playing        = count(array_filter($all_data, static fn($e) => ($e['status'] ?? '') === 'playing'));
 
 $csrf = $_SESSION['csrf_token'];
 
@@ -218,9 +219,11 @@ function sort_indicator(string $col, string $current_sort, string $current_dir):
 function status_label(string $status): string
 {
     return match ($status) {
-        'claimed' => '<span class="badge badge-claimed">Odebrane</span>',
-        'invalid' => '<span class="badge badge-invalid">Nieprawidłowe</span>',
-        default   => '<span class="badge badge-new">Nowe</span>',
+        'playing'   => '<span class="badge badge-playing">W grze</span>',
+        'completed' => '<span class="badge badge-completed">Ukończone</span>',
+        'claimed'   => '<span class="badge badge-claimed">Odebrane</span>',
+        'invalid'   => '<span class="badge badge-invalid">Nieprawidłowe</span>',
+        default     => '<span class="badge badge-new">Nowe</span>',
     };
 }
 ?>
@@ -302,10 +305,19 @@ function status_label(string $status): string
     .actions-cell { white-space: nowrap; }
 
     /* Odznaki statusu */
+    /* Odznaki statusu */
     .badge { display: inline-block; padding: 0.2rem 0.55rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-    .badge-new     { background: #d8f3dc; color: #2d6a4f; }
-    .badge-claimed { background: #cce5ff; color: #0056b3; }
-    .badge-invalid { background: #fde8e8; color: #c0392b; }
+    .badge-new       { background: #d8f3dc; color: #2d6a4f; }
+    .badge-playing   { background: #fff3cd; color: #856404; }
+    .badge-completed { background: #d1ecf1; color: #0c5460; }
+    .badge-claimed   { background: #cce5ff; color: #0056b3; }
+    .badge-invalid   { background: #fde8e8; color: #c0392b; }
+
+    /* Pasek postępu w tabeli */
+    .progress-cell { min-width: 80px; }
+    .progress-wrap { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; }
+    .progress-bar-sm { flex: 1; height: 6px; background: #e9ecef; border-radius: 3px; overflow: hidden; min-width: 40px; }
+    .progress-bar-sm-fill { height: 100%; background: #40916c; border-radius: 3px; }
 
     /* Przycisk usunięcia */
     .btn-delete { padding: 0.25rem 0.65rem; background: #fde8e8; color: #c0392b; border: 1px solid #f5c6cb; border-radius: 5px; font-size: 0.8rem; cursor: pointer; margin-left: 0.3rem; }
@@ -447,6 +459,10 @@ function status_label(string $status): string
       <div class="stat-lbl">Wszystkich zgłoszeń</div>
     </div>
     <div class="stat">
+      <div class="stat-val"><?= $playing ?></div>
+      <div class="stat-lbl">Aktywnych graczy</div>
+    </div>
+    <div class="stat">
       <div class="stat-val"><?= $with_name ?></div>
       <div class="stat-lbl">Z imieniem i nazwiskiem</div>
     </div>
@@ -521,6 +537,7 @@ function status_label(string $status): string
           <th style="width:2.5rem;text-align:center">#</th>
           <th><a href="<?= esc(sort_url('final_code', $sort, $sort_dir, $filter, $hide_empty)) ?>">Kod finałowy<?= sort_indicator('final_code', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('full_name',  $sort, $sort_dir, $filter, $hide_empty)) ?>">Imię i nazwisko<?= sort_indicator('full_name', $sort, $sort_dir) ?></a></th>
+          <th><a href="<?= esc(sort_url('discovered_count', $sort, $sort_dir, $filter, $hide_empty)) ?>">Postęp<?= sort_indicator('discovered_count', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('status',     $sort, $sort_dir, $filter, $hide_empty)) ?>">Status<?= sort_indicator('status', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('created_at', $sort, $sort_dir, $filter, $hide_empty)) ?>">Zgłoszono<?= sort_indicator('created_at', $sort, $sort_dir) ?></a></th>
           <th><a href="<?= esc(sort_url('updated_at', $sort, $sort_dir, $filter, $hide_empty)) ?>">Zaktualizowano<?= sort_indicator('updated_at', $sort, $sort_dir) ?></a></th>
@@ -529,16 +546,25 @@ function status_label(string $status): string
       </thead>
       <tbody>
         <?php if (empty($entries)): ?>
-          <tr><td colspan="<?= $is_logged_in ? 7 : 6 ?>" class="empty">Brak wpisów<?= ($filter || $hide_empty) ? ' pasujących do filtra' : '' ?>.</td></tr>
+          <tr><td colspan="<?= $is_logged_in ? 8 : 7 ?>" class="empty">Brak wpisów<?= ($filter || $hide_empty) ? ' pasujących do filtra' : '' ?>.</td></tr>
         <?php else: ?>
           <?php foreach ($entries as $i => $e): ?>
+          <?php $dc = (int)($e['discovered_count'] ?? 0); ?>
           <tr>
             <td style="text-align:center;color:#888;font-size:0.8rem" data-label="#"><?= $i + 1 ?></td>
             <td class="code-cell" data-label="Kod"><?= esc($e['final_code']) ?></td>
             <td class="name-cell" data-label="Nazwisko" title="<?= esc($e['full_name']) ?>">
               <?= $e['full_name'] !== '' ? esc($e['full_name']) : '<span style="color:#aaa">—</span>' ?>
             </td>
-            <td data-label="Status"><?= status_label($e['status']) ?></td>
+            <td class="progress-cell" data-label="Postęp">
+              <div class="progress-wrap">
+                <span><?= $dc ?>/<?= TOTAL_CARDS ?></span>
+                <div class="progress-bar-sm">
+                  <div class="progress-bar-sm-fill" style="width:<?= round($dc / TOTAL_CARDS * 100) ?>%"></div>
+                </div>
+              </div>
+            </td>
+            <td data-label="Status"><?= status_label($e['status'] ?? 'new') ?></td>
             <td class="date-cell" data-label="Zgłoszono"><?= esc($e['created_at']) ?></td>
             <td class="date-cell" data-label="Zaktualizowano"><?= esc($e['updated_at']) ?></td>
             <?php if ($is_logged_in): ?>

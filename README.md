@@ -22,10 +22,12 @@ img/                – zdjęcia (podmień przed wdrożeniem)
 README.md
 backend-php/        – backend urny (wdrażany oddzielnie przez FTP, nie na GitHub Pages)
   config/
-    config.php      – konfiguracja: hasło admina (hash), origin GH Pages, ścieżka do JSON
+    config.php      – konfiguracja: hasło admina (hash), origin GH Pages, ścieżka do JSON, TOTAL_CARDS
   api/
-    _helpers.php    – funkcje pomocnicze: CORS, JSON read/write, odpowiedzi
-    submit.php      – POST: rejestracja kodu finałowego
+    _helpers.php    – funkcje pomocnicze: CORS, JSON read/write, odpowiedzi, generowanie kodu
+    start.php       – POST: rejestracja sesji gracza przy otwarciu gry
+    progress.php    – POST: aktualizacja liczby odkrytych kart
+    submit.php      – POST: rejestracja kodu finałowego (po zebraniu wszystkich kart)
     update-name.php – POST: zapis imienia i nazwiska uczestnika
   admin/
     index.php       – panel administracyjny: lista zgłoszeń widoczna publicznie, akcje (edycja/usuwanie) wymagał logowania
@@ -152,6 +154,8 @@ public_html/              (lub inny webroot)
     config.php
   api/
     _helpers.php
+    start.php
+    progress.php
     submit.php
     update-name.php
   admin/
@@ -200,21 +204,33 @@ https://twoj-serwer.pl/admin/
 
 Nie jest linkowany ani opisany publicznie.
 
-**Widok publiczny (bez logowania):** lista wszystkich zgłoszeń z filtrowaniem i sortowaniem, statystyki oraz formularz logowania. Brak możliwości modyfikacji danych.
+**Widok publiczny (bez logowania):** lista wszystkich zgłoszeń z filtrowaniem i sortowaniem, statystyki (w tym liczba aktywnych graczy) oraz formularz logowania. Brak możliwości modyfikacji danych.
 
-**Widok administracyjny (po zalogowaniu):** dodatkowo dostępne przyciski edycji i usuwania wpisów, formularz zmiany statusu oraz przycisk usunięcia wszystkich zgłoszeń. Status wpisu: **Nowe** / **Odebrane** / **Nieprawidłowe**.
+**Widok administracyjny (po zalogowaniu):** dodatkowo dostępne przyciski edycji i usuwania wpisów, formularz zmiany statusu oraz przycisk usunięcia wszystkich zgłoszeń. Status wpisu: **Playing** / **Ukończone** / **Odebrane** / **Nieprawidłowe**.
+
+### Endpointy API
+
+| Endpoint              | Metoda | Opis                                                              |
+|-----------------------|--------|-------------------------------------------------------------------|
+| `/api/start.php`      | POST   | Rejestruje nową sesję gracza; zwraca `final_code` wygenerowany przez serwer |
+| `/api/progress.php`   | POST   | Aktualizuje `discovered_count` dla sesji; oznacza jako `completed` po zebraniu wszystkich kart |
+| `/api/submit.php`     | POST   | Rejestruje zakończenie gry (fallback gdy `start.php` nie był wywołany) |
+| `/api/update-name.php`| POST   | Zapisuje imię i nazwisko uczestnika                               |
 
 ### Dane uczestników
 
 Wszystkie zgłoszenia są zapisywane w pliku `storage/entries.json`. Każdy wpis zawiera:
 
-| Pole         | Opis                                      |
-|--------------|-------------------------------------------|
-| `final_code` | Kod finałowy (klucz główny, np. `1234-AB`) |
-| `full_name`  | Imię i nazwisko (opcjonalne)              |
-| `status`     | `new` / `claimed` / `invalid`             |
-| `created_at` | Data pierwszego zgłoszenia (ISO 8601)     |
-| `updated_at` | Data ostatniej aktualizacji               |
+| Pole               | Opis                                                        |
+|--------------------|-------------------------------------------------------------|
+| `final_code`       | Kod finałowy (klucz główny, np. `1234-AB`)                 |
+| `full_name`        | Imię i nazwisko (opcjonalne)                                |
+| `status`           | `playing` / `completed` / `claimed` / `invalid`            |
+| `discovered_count` | Liczba odkrytych kart (0–7)                                 |
+| `created_at`       | Data pierwszego zgłoszenia (ISO 8601)                       |
+| `updated_at`       | Data ostatniej aktualizacji                                 |
+
+Statusy: **playing** – gra w toku; **completed** – wszystkie karty zebrane (czeka na odbiór nagrody); **claimed** – nagroda odebrana; **invalid** – nieprawidłowy wpis.
 
 ### Wdrożenie – podsumowanie
 

@@ -229,6 +229,50 @@ function showFinalBanner(code) {
    ============================================= */
 
 /**
+ * Rejestruje sesję gracza w backendzie PHP przy pierwszym otwarciu gry.
+ * Zapisuje wygenerowany przez serwer kod finałowy do localStorage.
+ * Fire-and-forget: błędy są ciche, gra działa niezależnie od API.
+ */
+async function startGameSession() {
+  if (!API_BASE_URL) return;
+  if (getFinalCode()) return; // sesja już zarejestrowana
+  try {
+    const resp = await fetch(API_BASE_URL + '/api/start.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source: 'gh-pages' }),
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.ok && data.final_code) {
+        saveFinalCode(data.final_code);
+      }
+    }
+  } catch (_) {
+    // Brak połączenia – nie blokuje gry
+  }
+}
+
+/**
+ * Wysyła aktualny postęp gracza do backendu PHP.
+ * Fire-and-forget: błędy są ciche, gra działa niezależnie od API.
+ */
+async function reportProgress(count) {
+  if (!API_BASE_URL) return;
+  const code = getFinalCode();
+  if (!code) return;
+  try {
+    await fetch(API_BASE_URL + '/api/progress.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ final_code: code, discovered_count: count }),
+    });
+  } catch (_) {
+    // Brak połączenia – nie blokuje gry
+  }
+}
+
+/**
  * Wysyła kod finałowy do backendu PHP.
  * Fire-and-forget: błędy są ciche, gra działa niezależnie od API.
  */
@@ -366,6 +410,7 @@ function handleQrParam() {
   // Odkryj kartę
   discovered.push(card.id);
   saveDiscovered(discovered);
+  reportProgress(discovered.length);
   return { status: 'ok', card };
 }
 
@@ -389,6 +434,7 @@ function handleAdminParam() {
   if (action === 'reset') {
     localStorage.removeItem(LS_DISCOVERED);
     localStorage.removeItem(LS_FINAL_CODE);
+    localStorage.removeItem(LS_API_SUBMITTED);
     return 'reset';
   }
 
@@ -415,13 +461,19 @@ function init() {
   if (!isGameStarted() && adminAction !== 'pokaz') {
     localStorage.removeItem(LS_DISCOVERED);
     localStorage.removeItem(LS_FINAL_CODE);
+    localStorage.removeItem(LS_API_SUBMITTED);
   }
 
-  // 4. Odczytaj stan
+  // 4. Zarejestruj sesję gracza w backendzie (fire-and-forget)
+  if (isGameStarted() && adminAction !== 'pokaz') {
+    startGameSession();
+  }
+
+  // 5. Odczytaj stan
   const discovered = (isGameStarted() || adminAction === 'pokaz') ? getDiscovered() : [];
   const count = discovered.length;
 
-  // 5. Renderuj UI
+  // 6. Renderuj UI
   renderCards(discovered, status === 'ok' ? card.id : null);
   updateProgress(count);
 
@@ -517,6 +569,7 @@ function handleManualToken(rawToken) {
 
   discovered.push(card.id);
   saveDiscovered(discovered);
+  reportProgress(discovered.length);
 
   renderCards(discovered, card.id);
   updateProgress(discovered.length);
